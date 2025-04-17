@@ -1,0 +1,66 @@
+<!--pages/create/create.wxml-->
+<navigation-bar title="新建文档" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view class="create-container">
+  <!-- 文档标题 -->
+  <view class="form-item">
+    <view class="form-label">文档标题</view>
+    <input class="form-input" placeholder="输入文档标题" value="{{documentTitle}}" bindinput="onTitleInput" maxlength="50" />
+  </view>
+  
+  <!-- 标签选择 -->
+  <view class="form-item">
+    <view class="form-label">标签（可选）</view>
+    <view class="tags-list" wx:if="{{allTags.length > 0}}">
+      <view 
+        class="tag-item {{item.selected ? 'selected' : ''}}" 
+        wx:for="{{allTags}}" 
+        wx:key="id" 
+        style="--tag-color: {{item.color || '#ccc'}};"
+        bindtap="selectTag"
+        data-id="{{item.id}}"
+      >
+        <text>{{item.name}}</text>
+      </view>
+      <!-- 可以添加一个"新建标签"的按钮 -->
+      <view class="add-tag" bindtap="navigateToCreateTag">
+          <text class="plus-icon">+</text>
+          <text>新建标签</text>
+      </view>
+    </view>
+    <view class="no-tags" wx:else>
+      <text>暂无标签，</text>
+      <text class="create-tag-link" bindtap="navigateToCreateTag">去创建</text>
+    </view>
+  </view>
+
+  <!-- 文档类型 (暂时移除) -->
+  <!-- 
+  <view class="form-item">
+    <view class="form-label">文件类型</view>
+    <view class="type-selector" bindtap="selectDocumentType">
+      <text>{{documentType}}</text>
+      <view class="arrow-icon">▼</view>
+    </view>
+  </view>
+  -->
+  
+  <!-- 模板选择 (暂时移除) -->
+  <!-- 
+  <view class="form-item">
+    <view class="form-label">模板</view>
+    <view class="template-list">
+      <view class="template-item" wx:for="{{templates}}" wx:key="id" bindtap="selectTemplate" data-id="{{item.id}}">
+        <view class="template-icon {{item.icon}}"></view>
+        <view class="template-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+  -->
+  
+  <!-- 创建按钮 -->
+  <view class="create-btn-container">
+    <button class="create-btn" bindtap="createDocument" disabled="{{!documentTitle}}">创建文档</button>
+  </view>
+  
+  <!-- <view class="create-tip">创建后可随时编辑文档内容</view> -->
+</view>

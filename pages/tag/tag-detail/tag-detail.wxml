@@ -1,0 +1,70 @@
+<!--pages/tag/tag-detail/tag-detail.wxml-->
+<view class="theme-{{theme}}">
+  <view id="page-root" class="{{globalStyleClass}}">
+    <navigation-bar title="{{tag.name || '标签详情'}}" back="{{true}}" color="{{headerTextColor}}" background="{{tag.color || '#FFF'}}">
+      <view slot="right" class="nav-right">
+        <button class="share-btn" open-type="share">
+          <text class="share-icon">↗</text> <!-- 使用图标或文字 -->
+        </button>
+      </view>
+    </navigation-bar>
+
+    <view class="tag-detail-container">
+      <!-- 标签头部信息 -->
+      <view class="tag-header" style="background-color: {{tag.color || '#666'}}">
+        <view class="tag-info">
+          <view class="tag-color-indicator" style="background-color: {{tag.color}}"></view>
+          <view class="tag-name">{{tag.name}}</view>
+          <view class="tag-count">{{documents.length}} 个文档</view>
+        </view>
+        <view class="tag-description" wx:if="{{tag.description}}">{{tag.description}}</view>
+        <view class="tag-actions">
+          <view class="action-btn edit" bindtap="editTag">编辑</view>
+          <!-- <view class="action-btn share" bindtap="shareTag">分享</view> -->
+        </view>
+      </view>
+
+      <!-- 加载状态 -->
+      <view class="loading-container" wx:if="{{isLoading}}">
+        <view class="loading-indicator"></view>
+        <view class="loading-text">加载中...</view>
+      </view>
+
+      <block wx:else>
+        <!-- 文档列表 -->
+        <view class="section-title" wx:if="{{documents.length > 0}}">包含的文档</view>
+        <view class="document-list" wx:if="{{documents.length > 0}}">
+          <view class="document-item" wx:for="{{documents}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
+            <view class="document-icon">
+              <!-- 可以根据文档类型显示不同图标 -->
+              <image class="doc-icon-image" src="/image/icon_document.png"></image>
+            </view>
+            <view class="document-info">
+              <view class="document-title">{{item.title}}</view>
+              <view class="document-time">编辑于 {{item.updateTimeFormatted || '未知时间'}}</view> <!-- 需要格式化时间 -->
+            </view>
+            <view class="document-arrow">></view>
+          </view>
+        </view>
+
+        <!-- 空状态 -->
+        <view class="empty-state" wx:if="{{documents.length === 0}}">
+          <image class="empty-icon-image" src="/image/empty_box.png" mode="aspectFit"></image>
+          <view class="empty-text">此标签下暂无文档</view>
+          <view class="empty-subtext">可以尝试将文档添加到此标签</view>
+        </view>
+      </block>
+
+      <!-- 底部操作按钮 -->
+      <view class="bottom-actions">
+         <view class="add-document-btn" bindtap="addDocument">
+          <text class="add-text">添加文档到此标签</text>
+        </view>
+        <view class="delete-tag-btn" bindtap="deleteTag">
+          <text class="delete-text">删除标签</text>
+        </view>
+      </view>
+
+    </view>
+  </view>
+</view>

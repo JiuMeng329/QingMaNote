@@ -1,0 +1,270 @@
+/* pages/profile/profile.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color, #F6F6F6);
+}
+
+#page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: auto;
+  height: calc(100vh - 46px); /* 扣除 navigation-bar 高度 */
+}
+
+.profile-container {
+  padding: 30rpx;
+}
+
+/* 用户信息区域 */
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background-color: var(--card-bg-color, #FFFFFF);
+  border-radius: 12rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx var(--shadow-color, rgba(0, 0, 0, 0.05));
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background-color: #3E7FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20rpx;
+  position: relative;
+}
+
+.avatar-text {
+  color: #FFFFFF;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.user-detail {
+  flex: 1;
+}
+
+.username {
+  font-size: 32rpx;
+  color: var(--text-color, #333333);
+  font-weight: 500;
+  margin-bottom: 6rpx;
+}
+
+.email {
+  font-size: 24rpx;
+  color: var(--text-secondary-color, #999999);
+}
+
+.arrow-icon {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* 隐藏登录按钮样式 */
+.hidden-login-btn {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* 选择器样式 */
+.selector-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* 确保高于页面内容 */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.selector-content {
+  width: 100%;
+  background-color: var(--card-bg-color, #FFFFFF);
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+.selector-title {
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--text-color, #333333);
+  margin-bottom: 30rpx;
+}
+
+.selector-list {
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.selector-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color, #EEEEEE);
+}
+
+.selector-item.selected {
+  color: #3E7FFF;
+}
+
+.selected-icon {
+  color: #3E7FFF;
+  font-size: 32rpx;
+}
+
+.selector-cancel {
+  margin-top: 30rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+  color: #3E7FFF;
+  font-weight: 500;
+}
+
+/* 设置区域通用样式 */
+.settings-section {
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: var(--text-color, #333333);
+  font-weight: 500;
+  margin-bottom: 15rpx;
+  padding-left: 10rpx;
+}
+
+.settings-list {
+  background-color: var(--card-bg-color, #FFFFFF);
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 10rpx var(--shadow-color, rgba(0, 0, 0, 0.05));
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color, #EEEEEE);
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+}
+
+.item-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theme-icon, .font-icon, .font-size-icon, .autosave-icon, .preview-icon, .spell-icon, .cloud-icon, .storage-icon, .help-icon, .about-icon {
+  width: 40rpx;
+  height: 40rpx;
+  min-width: 40rpx;
+  min-height: 40rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.theme-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>');
+}
+
+.font-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>');
+}
+
+.font-size-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>');
+}
+
+.autosave-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>');
+}
+
+.preview-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>');
+}
+
+.spell-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>');
+}
+
+.cloud-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>');
+}
+
+.storage-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>');
+}
+
+.help-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>');
+}
+
+.about-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>');
+}
+
+.item-text {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.item-right {
+  display: flex;
+  align-items: center;
+}
+
+.item-value, .version {
+  font-size: 28rpx;
+  color: #999999;
+  margin-right: 10rpx;
+}
+
+.switch-control {
+  transform: scale(0.8);
+}

@@ -1,0 +1,291 @@
+/**tag-detail.wxss**/
+#page-root {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+page {
+  /* background-color: var(--bg-color); */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.tag-detail-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* 允许底部按钮定位 */
+  padding-bottom: 180rpx; /* 为底部按钮留出空间 */
+  box-sizing: border-box;
+}
+
+/* 导航栏 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.share-btn {
+  background: none;
+  border: none;
+  padding: 0 20rpx;
+  margin: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.share-btn::after {
+  display: none;
+}
+
+.share-icon {
+  font-size: 40rpx;
+}
+
+/* 标签头部样式 */
+.tag-header {
+  padding: 40rpx 30rpx;
+  /* color is dynamically set based on headerTextColor */
+  position: relative;
+  border-bottom-left-radius: 24rpx;
+  border-bottom-right-radius: 24rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx var(--shadow-color); /* Use variable */
+  color: var(--header-text-color, #FFFFFF); /* Fallback added */
+}
+
+.tag-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.tag-color-indicator {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.7); /* White border looks ok on most colors */
+}
+
+.tag-name {
+  font-size: 40rpx;
+  font-weight: 600;
+  margin-right: 20rpx;
+}
+
+.tag-count {
+  font-size: 26rpx;
+  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.tag-description {
+  font-size: 28rpx;
+  opacity: 0.9;
+  margin-bottom: 30rpx;
+  line-height: 1.5;
+}
+
+.tag-actions {
+  display: flex;
+  margin-top: 20rpx;
+}
+
+.action-btn {
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  margin-right: 20rpx;
+  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+  color: var(--header-text-color, #FFFFFF); /* Use dynamic text color */
+  cursor: pointer;
+}
+
+.action-btn.edit {
+}
+
+/* 文档列表样式 */
+.section-title {
+  font-size: 28rpx;
+  color: var(--text-secondary-color); /* Use variable */
+  padding: 20rpx 30rpx;
+  font-weight: 500;
+}
+
+.document-list {
+  background-color: var(--card-bg-color); /* Use variable */
+  margin: 0 30rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color); /* Use variable */
+  overflow: hidden;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color); /* Use variable */
+}
+
+.document-item:last-child {
+  border-bottom: none;
+}
+
+.document-icon {
+  margin-right: 20rpx;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.doc-icon-image {
+  width: 48rpx;
+  height: 48rpx;
+  opacity: 0.7; /* Slightly dim the icon */
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-title {
+  font-size: 32rpx;
+  color: var(--text-color); /* Use variable */
+  margin-bottom: 8rpx;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.document-time {
+  font-size: 24rpx;
+  color: var(--text-secondary-color); /* Use variable */
+}
+
+.document-arrow {
+  font-size: 32rpx;
+  color: var(--text-secondary-color); /* Use variable */
+  margin-left: 20rpx;
+}
+
+/* 空状态样式 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  margin: 0 30rpx;
+  background-color: var(--card-bg-color); /* Use variable */
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color); /* Use variable */
+}
+
+.empty-icon-image {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.7;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: var(--text-color); /* Use variable */
+  margin-bottom: 10rpx;
+  font-weight: 500;
+}
+
+.empty-subtext {
+  font-size: 28rpx;
+  color: var(--text-secondary-color); /* Use variable */
+}
+
+/* 底部操作按钮 */
+.bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-bg-color); /* Use variable */
+  padding: 20rpx 30rpx calc(20rpx + constant(safe-area-inset-bottom));
+  padding: 20rpx 30rpx calc(20rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid var(--border-color); /* Use variable */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -2rpx 10rpx var(--shadow-color); /* Use variable */
+  z-index: 100;
+}
+
+.add-document-btn {
+  height: 90rpx;
+  background-color: var(--primary-color); /* Use variable */
+  border-radius: 45rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx var(--shadow-color); /* Use variable */
+  margin-bottom: 20rpx;
+}
+
+.add-text {
+  color: #FFFFFF; /* Keep white for primary button */
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.delete-tag-btn {
+  height: 80rpx;
+  background-color: var(--card-bg-color); /* Use variable */
+  border: 1rpx solid var(--border-color); /* Use variable */
+  border-radius: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-text {
+  color: #FF4D4F; /* Keep delete color specific */
+  font-size: 30rpx;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.loading-indicator {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid var(--border-color); /* Use variable */
+  border-top: 6rpx solid var(--primary-color); /* Use variable */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: var(--text-secondary-color); /* Use variable */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

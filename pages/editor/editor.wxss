@@ -1,0 +1,489 @@
+/* pages/editor/editor.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F6F6F6;
+}
+
+#page-root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 导航栏自定义部分 */
+.nav-center {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-btn {
+  padding: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-icon {
+  font-size: 40rpx;
+  color: #333333;
+}
+
+.more-icon {
+  font-size: 40rpx;
+  color: #333333;
+}
+
+/* 编辑器容器 */
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  height: calc(100vh - 90rpx); /* 减去导航栏高度 */
+  box-sizing: border-box;
+}
+
+/* 工具栏 */
+.toolbar {
+  background-color: var(--card-bg-color);
+  border-bottom: 1rpx solid var(--border-color);
+  padding: 8rpx 0;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color);
+  display: flex;
+  width: 100%;
+  height: 86rpx;
+  z-index: 100;
+}
+
+.toolbar-scroll {
+  white-space: nowrap;
+  width: 100%;
+  height: 86rpx;
+  display: block;
+  overflow-x: auto;
+}
+
+.toolbar-inner {
+  display: inline-flex;
+  padding: 0 16rpx;
+  min-width: 100%;
+  height: 70rpx;
+  box-sizing: border-box;
+}
+
+.tool-item {
+  width: 70rpx;
+  height: 70rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8rpx;
+  border-radius: 8rpx;
+}
+
+.tool-item:active {
+  background-color: var(--bg-color);
+}
+
+.tool-icon {
+  font-size: 32rpx;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* 编辑区域 */
+.editor-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--card-bg-color);
+  height: calc(100% - 166rpx); /* 减去工具栏和状态栏的高度 */
+}
+
+/* 全屏预览样式 */
+.preview-area.full-screen {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 分屏模式 */
+.editor-content.split-mode {
+  flex-direction: row;
+  padding: 0;
+}
+
+.editor-area {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.editor-area.split-left {
+  width: 50%;
+  border-right: 1rpx solid #EEEEEE;
+  padding: 24rpx;
+}
+
+.preview-area.split-right {
+  width: 50%;
+  padding: 24rpx;
+  background-color: #FAFAFA;
+}
+
+.markdown-textarea {
+  width: 100%;
+  height: 100%;
+  font-size: var(--font-size-content);
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: transparent;
+}
+
+/* Markdown内容样式 */
+.markdown-content {
+  font-size: var(--font-size-content);
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.markdown-content h1 {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin: 30rpx 0 20rpx 0;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx solid #EEEEEE;
+}
+
+.markdown-content h2 {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin: 28rpx 0 18rpx 0;
+}
+
+.markdown-content h3 {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 26rpx 0 16rpx 0;
+}
+
+.markdown-content p {
+  margin: 16rpx 0;
+}
+
+.markdown-content ul, .markdown-content ol {
+  margin: 16rpx 0;
+  padding-left: 40rpx;
+}
+
+.markdown-content li {
+  margin: 8rpx 0;
+}
+
+.markdown-content blockquote {
+  border-left: 8rpx solid #EEEEEE;
+  padding-left: 20rpx;
+  color: #666666;
+  margin: 16rpx 0;
+}
+
+.markdown-content code {
+  background-color: var(--bg-color);
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+  font-family: monospace;
+}
+
+.markdown-content pre {
+  background-color: var(--bg-color);
+  padding: 20rpx;
+  border-radius: 8rpx;
+  overflow-x: auto;
+}
+
+.markdown-content a {
+  color: #3E7FFF;
+  text-decoration: underline;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  margin: 16rpx 0;
+}
+
+.markdown-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16rpx 0;
+}
+
+.markdown-content th, .markdown-content td {
+  border: 1rpx solid #EEEEEE;
+  padding: 12rpx;
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: var(--bg-color);
+  font-weight: bold;
+}
+
+/* 底部状态栏 */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background-color: var(--card-bg-color);
+  border-top: 1rpx solid var(--border-color);
+  min-height: 80rpx;
+  height: 80rpx;
+  box-sizing: border-box;
+  z-index: 100;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+}
+
+.word-count {
+  font-size: 24rpx;
+  color: var(--text-secondary-color);
+  margin-right: 16rpx;
+}
+
+.save-status {
+  font-size: 24rpx;
+  color: var(--primary-color);
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+}
+
+.action-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16rpx;
+  padding: 8rpx;
+  border-radius: 8rpx;
+}
+
+.action-btn:active {
+  background-color: var(--bg-color);
+}
+
+.action-icon {
+  font-size: 36rpx;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 更多菜单 */
+.more-menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.more-menu.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.menu-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.menu-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 30rpx;
+  transform: translateY(100%);
+  transition: transform 0.3s;
+}
+
+.more-menu.show .menu-content {
+  transform: translateY(0);
+}
+
+.menu-title {
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 30rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #EEEEEE;
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  margin-right: 24rpx;
+  width: 48rpx;
+  text-align: center;
+}
+
+.menu-text {
+  font-size: 32rpx;
+  color: #333333;
+}
+
+.menu-cancel {
+  margin-top: 30rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+  color: #3E7FFF;
+  font-weight: 500;
+}
+
+/* Spell Check Error Panel Styles */
+.spell-error-panel {
+  position: fixed;
+  bottom: 80rpx;
+  right: 0;
+  width: 400rpx;
+  max-height: 400rpx;
+  background-color: var(--card-bg-color);
+  border: 1rpx solid var(--border-color);
+  border-radius: 16rpx 0 0 16rpx;
+  box-shadow: -2rpx 0 10rpx var(--shadow-color);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+}
+
+.spell-error-panel.show {
+  transform: translateX(0);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+  font-weight: 500;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.close-panel-btn {
+  font-size: 36rpx;
+  color: var(--text-secondary-color);
+  padding: 8rpx;
+  cursor: pointer;
+}
+
+.error-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16rpx 0;
+}
+
+.error-item {
+  padding: 12rpx 24rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+  border-bottom: 1rpx solid var(--border-color);
+  cursor: pointer;
+}
+.error-item:last-child {
+  border-bottom: none;
+}
+
+.error-item:hover {
+  background-color: var(--bg-color);
+}
+
+/* Optional: Style for add to dictionary button */
+.add-dict-btn {
+  font-size: 30rpx;
+  color: var(--primary-color);
+  padding-left: 16rpx;
+}
+
+.no-errors {
+  padding: 40rpx 24rpx;
+  font-size: 28rpx;
+  color: var(--text-secondary-color);
+  text-align: center;
+}
+
+/* Status Bar Spell Check Button */
+.status-right .action-btn.spell-check {
+  position: relative;
+}
+
+.status-right .action-btn.spell-check .action-icon {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.status-right .action-btn.spell-check.has-errors .action-icon {
+  color: #FF4D4F;
+}
+
+.error-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #FF4D4F;
+  color: white;
+  font-size: 20rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 16rpx;
+  min-width: 30rpx;
+  text-align: center;
+  line-height: 1;
+}

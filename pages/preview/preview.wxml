@@ -1,0 +1,61 @@
+<view class="theme-{{theme}}">
+<view id="page-root" class="{{globalStyleClass}}">
+<!--pages/preview/preview.wxml-->
+<navigation-bar title="{{documentTitle}}" back="{{true}}" color="black" background="#FFF">
+  <view slot="center" class="nav-center">
+    <text>{{documentTitle}}</text>
+  </view>
+  <view slot="right" class="nav-right">
+    <view class="nav-btn edit" bindtap="switchToEdit">
+      <view class="edit-icon">✏️</view>
+    </view>
+    <view class="nav-btn more" bindtap="showMoreMenu">
+      <text class="more-icon">⋮</text>
+    </view>
+  </view>
+</navigation-bar>
+
+<view class="preview-container">
+  <!-- 预览内容区域 -->
+  <scroll-view scroll-y="true" class="preview-content">
+    <rich-text nodes="{{renderedContent}}" class="markdown-content"></rich-text>
+  </scroll-view>
+  
+  <!-- 底部状态栏 -->
+  <view class="status-bar">
+    <view class="status-left">
+      <text class="word-count">字数: {{wordCount}}</text>
+    </view>
+    <view class="status-right">
+      <view class="action-btn share" bindtap="shareDocument">
+        <text class="action-icon">↗️</text>
+      </view>
+      <view class="action-btn download" bindtap="downloadDocument">
+        <text class="action-icon">⬇️</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 更多菜单 -->
+<view class="more-menu {{showMenu ? 'show' : ''}}">
+  <view class="menu-mask" bindtap="hideMoreMenu"></view>
+  <view class="menu-content">
+    <view class="menu-title">导出选项</view>
+    <view class="menu-item" bindtap="exportAsMd">
+      <text class="menu-icon">📄</text>
+      <text class="menu-text">Markdown (.md)</text>
+    </view>
+    <view class="menu-item" bindtap="exportAsHtml">
+      <text class="menu-icon">📄</text>
+      <text class="menu-text">HTML (.html)</text>
+    </view>
+    <view class="menu-item" bindtap="exportAsPdf">
+      <text class="menu-icon">📄</text>
+      <text class="menu-text">PDF (.pdf)</text>
+    </view>
+    <view class="menu-cancel" bindtap="hideMoreMenu">取消</view>
+  </view>
+</view>
+</view>
+</view>

@@ -1,0 +1,32 @@
+<view id="page-root" class="{{globalStyleClass}}">
+<!--pages/favorite/favorite.wxml-->
+<navigation-bar title="收藏" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="favorite-container">
+    <block wx:if="{{favoriteDocuments.length > 0}}">
+      <view class="document-list">
+        <view class="document-item" wx:for="{{favoriteDocuments}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
+          <view class="document-info">
+            <view class="document-title">{{item.title}}</view>
+            <view class="document-meta">
+              <text class="update-time">{{item.updateTimeFormatted}}</text>
+            </view>
+          </view>
+          <view class="document-actions">
+            <view class="action-btn unfavorite" catchtap="cancelFavorite" data-id="{{item.id}}">
+              <text class="icon">★</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <view class="empty-icon">★</view>
+        <view class="empty-text">暂无收藏文档</view>
+        <view class="empty-subtext">你可以在文档列表或编辑器中收藏文档</view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+</view>

@@ -1,0 +1,52 @@
+<!--pages/search/search.wxml-->
+<view id="page-root" class="{{globalStyleClass}}">
+<navigation-bar title="搜索" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view class="search-container">
+  <!-- 搜索框 -->
+  <view class="search-header">
+    <view class="search-input-wrapper">
+      <view class="search-icon"></view>
+      <input class="search-input" type="text" placeholder="搜索文档" value="{{searchKeyword}}" bindinput="onSearchInput" confirm-type="search" bindconfirm="doSearch" focus="true" />
+      <view class="clear-icon" bindtap="clearSearch" wx:if="{{searchKeyword.length > 0}}"></view>
+    </view>
+    <view class="cancel-btn" bindtap="onCancel">取消</view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{!searchKeyword && searchHistory.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">搜索历史</text>
+      <view class="clear-history" bindtap="clearHistory">清除</view>
+    </view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{searchHistory}}" wx:key="*this" bindtap="useHistoryKeyword" data-keyword="{{item}}">
+        <view class="history-icon"></view>
+        <text class="history-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{searchKeyword}}">
+    <view class="result-stats" wx:if="{{searchResults.length > 0}}">
+      找到 {{searchResults.length}} 个结果
+    </view>
+    <view class="empty-result" wx:if="{{searchKeyword && searchResults.length === 0}}">
+      <view class="empty-icon"></view>
+      <text class="empty-text">未找到相关文档</text>
+    </view>
+    <view class="result-list" wx:if="{{searchResults.length > 0}}">
+      <view class="result-item" wx:for="{{searchResults}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
+        <view class="result-title">{{item.title}}</view>
+        <view class="result-preview">{{item.preview}}</view>
+        <view class="result-meta">
+          <text class="result-time">{{item.updateTime}}</text>
+          <view class="result-tags" wx:if="{{item.tags.length > 0}}">
+            <text class="result-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+</view>

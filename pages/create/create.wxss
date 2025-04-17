@@ -1,0 +1,167 @@
+/**create.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F6F6F6;
+}
+
+.create-container {
+  flex: 1;
+  padding: 30rpx;
+  background-color: #FFFFFF;
+}
+
+.form-item {
+  margin-bottom: 40rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  height: 80rpx;
+  border-bottom: 1rpx solid #EEEEEE;
+  font-size: 28rpx;
+  padding: 0 10rpx;
+}
+
+.type-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  border-bottom: 1rpx solid #EEEEEE;
+  font-size: 28rpx;
+  padding: 0 10rpx;
+}
+
+.arrow-icon {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.template-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10rpx;
+}
+
+.template-item {
+  width: 25%;
+  padding: 10rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.template-icon {
+  width: 100rpx;
+  height: 100rpx;
+  background-color: #F6F6F6;
+  border-radius: 10rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.template-name {
+  font-size: 24rpx;
+  color: #333;
+  text-align: center;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10rpx;
+}
+
+.tag-item {
+  height: 60rpx;
+  padding: 0 20rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+  color: #FFFFFF;
+  font-size: 24rpx;
+}
+
+.add-tag {
+  height: 60rpx;
+  padding: 0 20rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+  color: #666;
+  font-size: 24rpx;
+  background-color: #F6F6F6;
+}
+
+.plus-icon {
+  margin-left: 10rpx;
+  font-weight: bold;
+}
+
+.create-btn-container {
+  margin-top: 60rpx;
+  padding: 0 30rpx;
+}
+
+.create-btn {
+  background-color: #3E7FFF;
+  color: #FFFFFF;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.create-tip {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  margin-top: 30rpx;
+}
+
+/* 模板图标样式 */
+.blank {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40rpx;
+}
+
+.todo {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40rpx;
+}
+
+.note {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40rpx;
+}
+
+.schedule {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40rpx;
+}

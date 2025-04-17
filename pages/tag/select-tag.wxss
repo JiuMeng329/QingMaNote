@@ -1,0 +1,180 @@
+/* pages/tag/select-tag.wxss */
+#page-root {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+page {
+  /* background-color: var(--bg-color); */
+}
+
+.container {
+  padding: 24rpx;
+}
+
+/* 导航栏 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-btn {
+  padding: 0 30rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: var(--primary-color); /* Use variable */
+}
+
+/* 区域标题 */
+.section-title {
+  font-size: 28rpx;
+  color: var(--text-secondary-color); /* Use variable */
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+/* 标签列表 */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 30rpx;
+}
+
+.tag-item {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* 已选标签样式 */
+.selected-tags-area .tag-item.selected {
+  /* background-color and color set by inline style */
+}
+
+/* 所有标签列表中的已选标签 */
+.all-tags-area .tag-item {
+   /* border-color is dynamic, color is dynamic */
+}
+.all-tags-area .tag-item.selected {
+   border-width: 2rpx;
+   font-weight: bold;
+   /* Use brighter border based on tag color or primary color? */
+   border-color: var(--primary-color); /* Example: use primary color for selected border */
+}
+
+.remove-tag {
+  margin-left: 10rpx;
+  font-weight: bold;
+  font-size: 30rpx;
+  line-height: 1;
+  padding: 4rpx;
+  cursor: pointer;
+  /* Color will inherit from parent tag item */
+}
+
+.no-tags-tip {
+  color: var(--text-secondary-color); /* Use variable */
+  font-size: 28rpx;
+  padding: 20rpx 0;
+}
+
+/* 创建新标签 */
+.create-tag-area {
+  margin-top: 40rpx;
+  padding-top: 30rpx;
+  border-top: 1rpx solid var(--border-color); /* Use variable */
+}
+
+.create-input-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg-color); /* Use variable */
+  border-radius: 8rpx;
+  padding: 8rpx 16rpx;
+  border: 1rpx solid var(--border-color); /* Use variable */
+}
+
+.tag-input {
+  flex: 1;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
+  color: var(--text-color); /* Use variable */
+}
+
+.color-picker {
+  margin: 0 16rpx;
+}
+
+.color-dot {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 1rpx solid var(--border-color); /* Use variable */
+  cursor: pointer;
+}
+
+.create-btn {
+  background-color: var(--primary-color); /* Use variable */
+  color: #fff; /* Keep white */
+  font-size: 28rpx;
+  padding: 0 24rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  border-radius: 8rpx;
+  margin: 0;
+}
+
+.create-btn::after {
+  border: none;
+}
+
+/* 颜色选择器 */
+.color-picker-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-bg-color); /* Use variable */
+  border-top: 1rpx solid var(--border-color); /* Use variable */
+  border-radius: 16rpx 16rpx 0 0;
+  padding: 30rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  justify-content: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1001;
+}
+
+.color-picker-panel.show {
+  transform: translateY(0);
+}
+
+.color-option {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1rpx solid var(--border-color); /* Use variable */
+}
+
+.close-color-picker {
+  position: absolute;
+  top: 10rpx;
+  right: 20rpx;
+  font-size: 40rpx;
+  color: var(--text-secondary-color); /* Use variable */
+  cursor: pointer;
+} 

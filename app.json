@@ -1,0 +1,62 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/document/document",
+    "pages/editor/editor",
+    "pages/preview/preview",
+    "pages/create/create",
+    "pages/profile/profile",
+    "pages/favorite/favorite",
+    "pages/tag/tag",
+    "pages/tag/select-tag",
+    "pages/tag/tag-create/tag-create",
+    "pages/tag/tag-detail/tag-detail",
+    "pages/search/search",
+    "pages/more/more"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "MarkMark",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#8F8F8F",
+    "selectedColor": "#3E7FFF",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "image/home.png",
+        "selectedIconPath": "image/home_selected.png"
+      },
+      {
+        "pagePath": "pages/document/document",
+        "text": "文档",
+        "iconPath": "image/document.png",
+        "selectedIconPath": "image/document_selected.png"
+      },
+      {
+        "pagePath": "pages/tag/tag",
+        "text": "标签",
+        "iconPath": "image/tag.png",
+        "selectedIconPath": "image/tag_selected.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "image/profile.png",
+        "selectedIconPath": "image/profile_selected.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "workers": "workers",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
+}

@@ -1,0 +1,94 @@
+<view class="theme-{{theme}}">
+<view id="page-root" class="{{globalStyleClass}}">
+<!--pages/document/document.wxml-->
+<navigation-bar title="{{pageTitle || '文档'}}" back="{{currentTagId}}" color="black" background="#FFF">
+  <view slot="right">
+    <!-- 可以添加搜索按钮等 -->
+    <!-- <button bindtap="toggleSearch">搜</button> -->
+  </view>
+</navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="document-container">
+    <!-- 搜索框 -->
+    <view class="search-box">
+      <view class="search-input-wrapper">
+        <icon type="search" size="14" color="#999"></icon>
+        <input class="search-input" placeholder="搜索文档标题或内容..." value="{{searchValue}}" bindinput="onSearch" confirm-type="search"/>
+        <icon wx:if="{{searchValue}}" type="clear" size="14" color="#999" bindtap="clearSearch"></icon>
+      </view>
+    </view>
+    
+    <!-- 文档列表 -->
+    <view class="document-list" wx:if="{{documents.length > 0}}">
+      <view class="document-item" wx:for="{{documents}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
+        <!-- 文档图标 -->
+        <view class="document-icon">
+           <image class="doc-icon-image" src="/image/icon_document.png"></image>
+           <!-- 后续可以根据 item.tags[0] 的颜色来动态设置图标颜色或背景 -->
+        </view>
+        <!-- 文档信息 -->
+        <view class="document-info">
+          <view class="document-title">{{item.title}}</view>
+          <view class="document-meta">
+            <text>{{item.updateTimeFormatted}}</text>
+            <!-- 可以添加其他元信息，如字数、文件大小等 -->
+            <!-- <text class="dot-separator">·</text> -->
+            <!-- <text>{{item.wordCount}} 字</text> -->
+          </view>
+        </view>
+        <!-- 操作按钮 -->
+        <view class="document-actions" catchtap="showDocActions" data-id="{{item.id}}">
+          <view class="action-btn more">
+            <text class="more-icon">⋮</text> <!-- 使用三个点图标 -->
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <block wx:else>
+      <view class="empty-state">
+        <image class="empty-icon" src="/image/empty_document.png" mode="aspectFit"></image>
+        <view class="empty-text">{{searchValue ? '未找到相关文档' : (currentTagId ? '此标签下暂无文档' : '暂无文档')}}</view>
+        <view class="empty-subtext" wx:if="{{!searchValue}}">{{currentTagId ? '可以尝试将文档添加到此标签' : '点击底部导航栏的 \"+\" 按钮创建新文档'}}</view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+
+<!-- 文档操作菜单 -->
+<view class="action-menu {{showDocMenu ? 'show' : ''}}">
+  <view class="menu-mask" bindtap="hideDocMenu"></view>
+  <view class="menu-content">
+    <view class="menu-title">{{currentDoc.title || '文档操作'}}</view>
+    <view class="menu-item" bindtap="renameDocument">
+      <text class="menu-icon">✎</text>
+      <text class="menu-text">重命名</text>
+    </view>
+    <view class="menu-item" bindtap="shareDocument">
+      <text class="menu-icon">↗</text>
+      <text class="menu-text">分享</text>
+    </view>
+    <view class="menu-item" bindtap="toggleFavorite">
+      <!-- 根据 currentDoc.favorite 动态显示图标和文字 -->
+      <text class="menu-icon">{{currentDoc.favorite ? '★' : '☆'}}</text>
+      <text class="menu-text">{{currentDoc.favorite ? '取消收藏' : '收藏'}}</text>
+    </view>
+    <!-- <view class="menu-item" bindtap="moveToFolder">-->
+    <view class="menu-item" bindtap="addTag">
+      <text class="menu-icon">🏷</text>
+      <text class="menu-text">管理标签</text> <!-- 改为管理标签更合适 -->
+    </view>
+    <!-- <view class="menu-item" bindtap="archiveDocument">-->
+    <!--   <text class="menu-icon">📥</text>-->
+    <!--   <text class="menu-text">归档</text>-->
+    <!-- </view>-->
+    <view class="menu-item delete" bindtap="deleteDocument">
+      <text class="menu-icon">🗑</text>
+      <text class="menu-text">删除</text>
+    </view>
+    <view class="menu-cancel" bindtap="hideDocMenu">取消</view>
+  </view>
+</view>
+</view>
+</view>

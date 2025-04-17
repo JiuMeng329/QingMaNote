@@ -1,0 +1,188 @@
+<view class="theme-{{theme}}">
+<view id="page-root">
+<!--pages/editor/editor.wxml-->
+<navigation-bar title="{{documentTitle}}" back="{{true}}" color="black" background="#FFF">
+  <view slot="center" class="nav-center">
+    <text>{{documentTitle}}</text>
+  </view>
+</navigation-bar>
+
+<view class="editor-container">
+  <!-- 工具栏 -->
+  <view class="toolbar">
+    <scroll-view scroll-x="true" class="toolbar-scroll">
+      <view class="toolbar-inner">
+        <view class="tool-item" bindtap="formatText" data-type="h1">
+          <text class="tool-icon">H₁</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="h2">
+          <text class="tool-icon">H₂</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="bold">
+          <text class="tool-icon">B</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="italic">
+          <text class="tool-icon">I</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="list-ul">
+          <text class="tool-icon">•</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="list-ol">
+          <text class="tool-icon">1.</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="quote">
+          <text class="tool-icon">"</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="code">
+          <text class="tool-icon">&lt;/&gt;</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="link">
+          <text class="tool-icon">🔗</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="image">
+          <text class="tool-icon">🖼️</text>
+        </view>
+        <view class="tool-item" bindtap="formatText" data-type="table">
+          <text class="tool-icon">▦</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+  <!-- 编辑区域 - 仅在非全屏预览模式显示 -->
+  <view class="editor-content {{editMode === 'split' ? 'split-mode' : ''}}" wx:if="{{editMode !== 'preview'}}">
+    <view class="editor-area {{editMode === 'split' ? 'split-left' : ''}}">
+      <textarea 
+        class="markdown-textarea" 
+        value="{{content}}" 
+        bindinput="onContentChange" 
+        bindfocus="onTextareaFocus"
+        bindlinechange="onTextareaSelect"
+        maxlength="-1"
+        placeholder="开始编辑...">
+      </textarea>
+    </view>
+    
+    <!-- 预览区域 - 仅在分屏模式显示 -->
+    <scroll-view 
+      wx:if="{{editMode === 'split'}}" 
+      class="preview-area split-right" 
+      scroll-y="true">
+      <rich-text nodes="{{renderedContent}}" class="markdown-content"></rich-text>
+    </scroll-view>
+  </view>
+  
+  <!-- 全屏预览区域 - 仅在全屏预览模式显示 -->
+  <scroll-view 
+    wx:if="{{editMode === 'preview'}}" 
+    class="preview-area full-screen" 
+    scroll-y="true">
+    <rich-text nodes="{{renderedContent}}" class="markdown-content"></rich-text>
+  </scroll-view>
+  
+  <!-- Spell Check Error Panel (New) -->
+  <view class="spell-error-panel {{showErrorPanel ? 'show' : ''}}" wx:if="{{spellCheckEnabled}}">
+    <view class="panel-header">
+      <text>拼写错误 ({{spellErrors.length}})</text>
+      <text class="close-panel-btn" bindtap="toggleErrorPanel">×</text>
+    </view>
+    <scroll-view scroll-y="true" class="error-list">
+      <block wx:if="{{spellErrors.length > 0}}">
+        <view class="error-item" wx:for="{{spellErrors}}" wx:key="*this" 
+              data-word="{{item}}" bindtap="showWordActions">
+          <text>{{item}}</text>
+          <!-- <text class="add-dict-btn">+</text> -->
+        </view>
+      </block>
+      <block wx:else>
+        <view class="no-errors">未发现拼写错误</view>
+      </block>
+    </scroll-view>
+  </view>
+  
+  <!-- 底部状态栏 -->
+  <view class="status-bar">
+    <view class="status-left">
+      <text class="word-count">字数: {{wordCount}}</text>
+      <text class="save-status">{{saveStatus}}</text>
+    </view>
+    <view class="status-right">
+      <!-- Spell Check Toggle Button (New) -->
+      <view class="action-btn spell-check {{spellErrors.length > 0 ? 'has-errors' : ''}}" 
+            bindtap="toggleErrorPanel" wx:if="{{spellCheckEnabled}}">
+        <text class="action-icon">Abc</text>
+        <view class="error-badge" wx:if="{{spellErrors.length > 0}}">{{spellErrors.length}}</view>
+      </view>
+      <view class="action-btn undo" bindtap="undoEdit">
+        <text class="action-icon">↩️</text>
+      </view>
+      <view class="action-btn redo" bindtap="redoEdit">
+        <text class="action-icon">↪️</text>
+      </view>
+      <view class="action-btn preview" bindtap="switchToPreview">
+        <text class="action-icon">👁️</text>
+      </view>
+      <view class="action-btn more" bindtap="showMoreMenu">
+        <text class="action-icon">⋮</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 更多菜单 -->
+<view class="more-menu {{showMenu ? 'show' : ''}}" bindtap="hideMoreMenu">
+  <view class="menu-mask"></view>
+  <view class="menu-content" catchtap>
+    <view class="menu-title">更多操作</view>
+    <view class="menu-item" bindtap="shareDocument">
+      <text class="menu-icon">↗️</text>
+      <text class="menu-text">分享</text>
+    </view>
+    <view class="menu-item" bindtap="exportAsMD">
+      <text class="menu-icon">📄</text>
+      <text class="menu-text">导出为 Markdown</text>
+    </view>
+    <view class="menu-item" bindtap="exportAsHTML">
+      <text class="menu-icon">🌐</text>
+      <text class="menu-text">导出为 HTML</text>
+    </view>
+    <view class="menu-item" bindtap="exportAsPDF">
+      <text class="menu-icon">📑</text>
+      <text class="menu-text">导出为 PDF (开发中)</text>
+    </view>
+    <view class="menu-item" bindtap="exportAsWord">
+      <text class="menu-icon">📝</text>
+      <text class="menu-text">导出为 Word (开发中)</text>
+    </view>
+    <view class="menu-item" bindtap="modifyTags">
+      <text class="menu-icon">🏷️</text>
+      <text class="menu-text">修改标签</text>
+    </view>
+    <view class="menu-item" bindtap="addTag">
+      <text class="menu-icon">➕</text>
+      <text class="menu-text">添加标签</text>
+    </view>
+    <view class="menu-item" bindtap="viewHistory">
+      <text class="menu-icon">⏳</text>
+      <text class="menu-text">查看历史版本 (开发中)</text>
+    </view>
+    <view class="menu-item cancel" bindtap="hideMoreMenu">
+      <text>取消</text>
+    </view>
+  </view>
+</view>
+
+<!-- PDF Render Target (New and Hidden) -->
+<view id="pdf-render-container" 
+      class="pdf-render-target" 
+      style="position:absolute; top:-9999px; left: -9999px; width: 750px; background: white; {{pdfRenderContainer_show ? '' : 'display:none;'}}">
+  <!-- Use a canvas component for rendering -->
+  <canvas type="2d" id="pdf-canvas" style="width: 750px; height: 1px;"></canvas> 
+  <!-- Rich text inside canvas might not work directly, render logic is complex. -->
+  <!-- The JS now uses the fields API with node:true to get the canvas node -->
+  <!-- We might still need a rich-text here IF the canvas approach needs it for layout calculation -->
+  <rich-text nodes="{{pdfRenderContainer_html}}"></rich-text> 
+</view>
+
+</view>
+</view>

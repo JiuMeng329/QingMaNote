@@ -1,0 +1,53 @@
+<view class="theme-{{theme}}">
+<view id="page-root">
+<!--pages/tag/tag.wxml-->
+<navigation-bar title="标签管理" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="tag-container">
+    <!-- 搜索框 (Use document page structure and classes) -->
+    <view class="search-box">
+      <view class="search-input-wrapper">
+        <icon type="search" size="14" color="#999"></icon>
+        <input class="search-input" placeholder="搜索标签..." value="{{searchValue}}" bindinput="onSearch" confirm-type="search"/>
+        <icon wx:if="{{searchValue}}" type="clear" size="14" color="#999" bindtap="clearSearch"></icon>
+      </view>
+    </view>
+    
+    <!-- 标签列表 -->
+    <block wx:if="{{tags.length > 0}}">
+      <view class="tag-list">
+        <view class="tag-item" wx:for="{{tags}}" wx:key="id" bindtap="viewTagDetail" data-id="{{item.id}}">
+          <view class="tag-color" style="background-color: {{item.color}}"></view>
+          <view class="tag-info">
+            <view class="tag-name">{{item.name}}</view>
+            <view class="tag-count">{{item.documentCount}} 个文档</view>
+          </view>
+          <view class="tag-actions">
+            <view class="action-btn edit" catchtap="editTag" data-id="{{item.id}}">
+              <text class="icon">✎</text>
+            </view>
+            <view class="action-btn delete" catchtap="deleteTag" data-id="{{item.id}}">
+              <text class="icon">🗑</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 空状态 -->
+    <block wx:else>
+      <view class="empty-state">
+        <view class="empty-icon">🏷️</view>
+        <view class="empty-text">暂无标签</view>
+        <view class="empty-subtext">创建标签可以更好地组织您的文档</view>
+      </view>
+    </block>
+    
+    <!-- 添加标签按钮 -->
+    <view class="add-tag-btn" bindtap="createTag">
+      <text class="add-icon">+</text>
+    </view>
+  </view>
+</scroll-view>
+</view>
+</view>

@@ -1,0 +1,39 @@
+/**app.wxss**/
+@import "theme.wxss";
+
+page {
+  /* 默认使用浅色主题 */
+  --bg-color: #F6F6F6;
+  --card-bg-color: #FFFFFF;
+  --text-color: #333333;
+  --text-secondary-color: #999999;
+  --border-color: #EEEEEE;
+  --primary-color: #3E7FFF;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  
+  /* 默认使用系统字体 */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  
+  /* 默认使用中等字号 */
+  --font-size-base: 30rpx;
+  --font-size-title: 34rpx;
+  --font-size-subtitle: 32rpx;
+  --font-size-content: 30rpx;
+  --font-size-small: 24rpx;
+  
+  /* 不在此处直接应用背景和文字颜色，让页面元素继承或使用变量 */
+  /* background-color: var(--bg-color); */
+  /* color: var(--text-color); */
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}

@@ -1,0 +1,76 @@
+<view class="theme-{{theme}}">
+<view id="page-root" class="{{globalStyleClass}}">
+<!--index.wxml-->
+<navigation-bar title="MarkMark" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="index-container">
+    <!-- 顶部标题和操作区 -->
+    <view class="header">
+      <view class="app-title">MarkMark</view>
+      <view class="header-actions">
+        <view class="action-btn search" bindtap="toggleSearch">
+          <view class="search-icon"></view>
+        </view>
+        <view class="action-btn settings" bindtap="onSettings">
+          <view class="settings-icon"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Inline Search Box (New) -->
+    <view class="search-box index-search-box" wx:if="{{showSearch}}">
+      <view class="search-input-wrapper">
+        <icon type="search" size="14" color="#999"></icon>
+        <input class="search-input" placeholder="搜索文档或标签..." value="{{searchValue}}" bindinput="onSearchInput" confirm-type="search"/>
+        <icon wx:if="{{searchValue}}" type="clear" size="14" color="#999" bindtap="clearSearch"></icon>
+      </view>
+    </view>
+
+    <!-- 最近文档列表 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">最近文档</text>
+        <text class="view-all" bindtap="viewAllDocuments">查看全部</text>
+      </view>
+      <view class="document-list">
+        <view class="document-item" wx:for="{{recentDocuments}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
+          <view class="document-info">
+            <view class="document-title">{{item.title}}</view>
+            <view class="document-meta">
+              <text class="update-time">编辑于 {{item.updateTimeFormatted}}</text>
+            </view>
+          </view>
+          <view class="document-icon">
+            <view class="doc-icon"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 文件夹分类区域 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">我的标签</text>
+        <text class="manage-btn" bindtap="manageFolders">管理</text>
+      </view>
+      <view class="folder-grid">
+        <view class="folder-item" wx:for="{{folders}}" wx:key="id" bindtap="openFolder" data-id="{{item.id}}">
+          <view class="folder-icon" style="background-color: {{item.color}}"></view>
+          <view class="folder-name">{{item.name}}</view>
+          <view class="folder-count">{{item.count}}个文档</view>
+        </view>
+        <view class="folder-item add-folder" bindtap="createFolder">
+          <view class="add-folder-icon"></view>
+          <view class="folder-name">新建标签</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 创建新文档按钮 -->
+<view class="create-btn" bindtap="createNewDocument">
+  <view class="create-icon">+</view>
+</view>
+</view>
+</view>

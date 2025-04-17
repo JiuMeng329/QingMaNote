@@ -1,0 +1,225 @@
+/* pages/document/document.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+}
+
+/* Apply theme variables to the root container */
+#page-root {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.document-container {
+  padding: 24rpx;
+  min-height: 100%;
+}
+
+/* 搜索框 */
+.search-box {
+  padding: 0 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg-color);
+  border-radius: 16rpx;
+  padding: 16rpx 24rpx;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color);
+}
+
+.search-input {
+  flex: 1;
+  margin: 0 16rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+/* 文档列表 */
+.document-list {
+  padding: 0 16rpx;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg-color);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color);
+}
+
+.document-icon {
+  margin-right: 24rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  /* Icon itself might not be themeable */
+}
+
+.doc-icon-image {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-title {
+  font-size: 32rpx;
+  color: var(--text-color);
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.document-meta {
+  font-size: 24rpx;
+  color: var(--text-secondary-color);
+}
+
+.dot-separator {
+  margin: 0 8rpx;
+}
+
+.document-actions {
+  padding-left: 16rpx;
+}
+
+.action-btn.more {
+  padding: 8rpx;
+}
+
+.more-icon {
+  font-size: 36rpx;
+  color: var(--text-secondary-color);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 48rpx;
+}
+
+.empty-icon {
+  width: 240rpx;
+  height: 240rpx;
+  margin-bottom: 32rpx;
+  opacity: 0.7;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: var(--text-color);
+  margin-bottom: 16rpx;
+}
+
+.empty-subtext {
+  font-size: 28rpx;
+  color: var(--text-secondary-color);
+}
+
+/* 文档操作菜单 */
+.action-menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.action-menu.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.menu-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.menu-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--card-bg-color);
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 30rpx;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.action-menu.show .menu-content {
+  transform: translateY(0);
+}
+
+.menu-title {
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 30rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  margin-right: 24rpx;
+  width: 48rpx;
+  text-align: center;
+  color: var(--text-secondary-color);
+}
+
+.menu-text {
+  font-size: 32rpx;
+  color: var(--text-color);
+}
+
+.menu-item.delete .menu-text {
+  color: #FF4D4F;
+}
+
+.menu-item.delete .menu-icon {
+  color: #FF4D4F;
+}
+
+.menu-cancel {
+  margin-top: 30rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}

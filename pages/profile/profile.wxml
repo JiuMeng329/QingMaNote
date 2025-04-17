@@ -1,0 +1,213 @@
+<!--pages/profile/profile.wxml-->
+<navigation-bar title="设置" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="profile-container">
+    <!-- 用户信息区域 -->
+    <view class="user-info" bindtap="handleUserInfoTap">
+      <view class="avatar">
+        <text class="avatar-text" wx:if="{{!userInfo.avatar}}">{{userInfo.name ? userInfo.name[0] : 'M'}}</text>
+        <image wx:if="{{userInfo.avatar}}" class="avatar-image" src="{{userInfo.avatar}}"></image>
+      </view>
+      <view class="user-detail">
+        <view class="username">{{userInfo.name}}</view>
+        <view class="email">{{userInfo.email}}</view>
+      </view>
+      <view class="arrow-icon">></view>
+    </view>
+
+    <!-- 添加隐藏的登录按钮 -->
+    <button 
+      wx:if="{{showLoginBtn}}"
+      class="hidden-login-btn"
+      open-type="getUserProfile"
+      bindgetuserprofile="onGetUserProfile"
+      bindtap="preventDefault"
+    ></button>
+
+    <!-- 外观设置区域 -->
+    <view class="settings-section">
+      <view class="section-title">外观</view>
+      <view class="settings-list">
+        <view class="settings-item" bindtap="switchTheme">
+          <view class="item-left">
+            <view class="item-icon theme-icon"></view>
+            <text class="item-text">主题</text>
+          </view>
+          <view class="item-right">
+            <text class="item-value">{{themeMode === 'system' ? '跟随系统' : manualThemeName}}</text>
+            <view class="arrow-icon">></view>
+          </view>
+        </view>
+        <view class="settings-item" bindtap="switchFont">
+          <view class="item-left">
+            <view class="item-icon font-icon"></view>
+            <text class="item-text">字体</text>
+          </view>
+          <view class="item-right">
+            <text class="item-value">{{settings.font}}</text>
+            <view class="arrow-icon">></view>
+          </view>
+        </view>
+        <view class="settings-item" bindtap="switchFontSize">
+          <view class="item-left">
+            <view class="item-icon font-size-icon"></view>
+            <text class="item-text">字号</text>
+          </view>
+          <view class="item-right">
+            <text class="item-value">{{settings.fontSize}}</text>
+            <view class="arrow-icon">></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 编辑器设置区域 -->
+    <view class="settings-section">
+      <view class="section-title">编辑器</view>
+      <view class="settings-list">
+        <view class="settings-item">
+          <view class="item-left">
+            <view class="item-icon autosave-icon"></view>
+            <text class="item-text">自动保存</text>
+          </view>
+          <view class="item-right">
+            <switch checked="{{settings.autoSave}}" color="#3E7FFF" class="switch-control" bindchange="toggleAutoSave"/>
+          </view>
+        </view>
+        <view class="settings-item">
+          <view class="item-left">
+            <view class="item-icon preview-icon"></view>
+            <text class="item-text">实时预览</text>
+          </view>
+          <view class="item-right">
+            <switch checked="{{settings.livePreview}}" color="#3E7FFF" class="switch-control" bindchange="toggleLivePreview"/>
+          </view>
+        </view>
+        <view class="settings-item">
+          <view class="item-left">
+            <view class="item-icon spell-icon"></view>
+            <text class="item-text">拼写检查</text>
+          </view>
+          <view class="item-right">
+            <switch checked="{{settings.spellCheck}}" color="#3E7FFF" class="switch-control" bindchange="toggleSpellCheck"/>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 存储与同步区域 -->
+    <view class="settings-section">
+      <view class="section-title">存储与同步</view>
+      <view class="settings-list">
+        <view class="settings-item">
+          <view class="item-left">
+            <view class="item-icon cloud-icon"></view>
+            <text class="item-text">云同步</text>
+          </view>
+          <view class="item-right">
+            <switch checked="{{settings.cloudSync}}" color="#3E7FFF" class="switch-control" bindchange="toggleCloudSync"/>
+          </view>
+        </view>
+        <view class="settings-item" bindtap="viewStorage">
+          <view class="item-left">
+            <view class="item-icon storage-icon"></view>
+            <text class="item-text">存储空间</text>
+          </view>
+          <view class="item-right">
+            <text class="item-value">{{settings.storage.used}} / {{settings.storage.total}}</text>
+            <view class="arrow-icon">></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 关于与帮助区域 -->
+    <view class="settings-section">
+      <view class="section-title">关于与帮助</view>
+      <view class="settings-list">
+        <view class="settings-item" bindtap="viewHelp">
+          <view class="item-left">
+            <view class="item-icon help-icon"></view>
+            <text class="item-text">帮助中心</text>
+          </view>
+          <view class="item-right">
+            <view class="arrow-icon">></view>
+          </view>
+        </view>
+        <view class="settings-item" bindtap="viewAbout">
+          <view class="item-left">
+            <view class="item-icon about-icon"></view>
+            <text class="item-text">关于我们</text>
+          </view>
+          <view class="item-right">
+            <text class="version">{{version}}</text>
+            <view class="arrow-icon">></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 主题选择器 -->
+<view class="selector-mask" wx:if="{{showThemeSelector}}" bindtap="closeThemeSelector">
+  <view class="selector-content" catchtap="stopPropagation">
+    <view class="selector-title">选择主题</view>
+    <view class="selector-list">
+      <view class="selector-item {{themeMode === 'system' ? 'selected' : ''}}" 
+            data-value="system" 
+            bindtap="selectThemeOrMode">
+        <text>{{systemThemeOption.name}}</text>
+        <view class="selected-icon" wx:if="{{themeMode === 'system'}}">✓</view>
+      </view>
+      <view class="selector-item {{themeMode === 'manual' && manualThemeName === item.name ? 'selected' : ''}}" 
+            wx:for="{{themeOptions}}" 
+            wx:key="value" 
+            data-value="{{item.value}}" 
+            bindtap="selectThemeOrMode">
+        <text>{{item.name}}</text>
+        <view class="selected-icon" wx:if="{{themeMode === 'manual' && manualThemeName === item.name}}">✓</view>
+      </view>
+    </view>
+    <view class="selector-cancel" bindtap="closeThemeSelector">取消</view>
+  </view>
+</view>
+
+<!-- 字体选择器 -->
+<view class="selector-mask" wx:if="{{showFontSelector}}" bindtap="closeFontSelector">
+  <view class="selector-content" catchtap="stopPropagation">
+    <view class="selector-title">选择字体</view>
+    <view class="selector-list">
+      <view class="selector-item {{settings.font === item.name ? 'selected' : ''}}" 
+            wx:for="{{fontOptions}}" 
+            wx:key="value" 
+            data-index="{{index}}" 
+            bindtap="selectFont">
+        <text>{{item.name}}</text>
+        <view class="selected-icon" wx:if="{{settings.font === item.name}}">✓</view>
+      </view>
+    </view>
+    <view class="selector-cancel" bindtap="closeFontSelector">取消</view>
+  </view>
+</view>
+
+<!-- 字号选择器 -->
+<view class="selector-mask" wx:if="{{showFontSizeSelector}}" bindtap="closeFontSizeSelector">
+  <view class="selector-content" catchtap="stopPropagation">
+    <view class="selector-title">选择字号</view>
+    <view class="selector-list">
+      <view class="selector-item {{settings.fontSize === item.name ? 'selected' : ''}}" 
+            wx:for="{{fontSizeOptions}}" 
+            wx:key="value" 
+            data-index="{{index}}" 
+            bindtap="selectFontSize">
+        <text>{{item.name}}</text>
+        <view class="selected-icon" wx:if="{{settings.fontSize === item.name}}">✓</view>
+      </view>
+    </view>
+    <view class="selector-cancel" bindtap="closeFontSizeSelector">取消</view>
+  </view>
+</view>
+</view>

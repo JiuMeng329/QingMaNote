@@ -1,0 +1,70 @@
+<view class="theme-{{theme}}">
+<view id="page-root" class="{{globalStyleClass}}">
+<!--pages/tag/select-tag.wxml-->
+<navigation-bar title="{{pageTitle}}" back="{{true}}" color="black" background="#FFF">
+  <view slot="right" class="nav-right">
+    <view class="nav-btn save" bindtap="saveSelection">完成</view>
+  </view>
+</navigation-bar>
+
+<view class="container">
+  <!-- 已选标签区域 -->
+  <view class="selected-tags-area" wx:if="{{selectedTags.length > 0}}">
+    <text class="section-title">已选标签:</text>
+    <view class="tag-list selected">
+      <view class="tag-item selected" wx:for="{{selectedTags}}" wx:key="id" style="background-color: {{item.color || '#eee'}}; color: {{getTextColor(item.color)}}">
+        <text>{{item.name}}</text>
+        <text class="remove-tag" data-id="{{item.id}}" bindtap="toggleTagSelection">×</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 所有标签列表 -->
+  <view class="all-tags-area">
+    <text class="section-title">所有标签:</text>
+    <view class="tag-list all">
+      <view 
+        class="tag-item {{item.selected ? 'selected' : ''}}" 
+        wx:for="{{allTags}}" 
+        wx:key="id" 
+        data-id="{{item.id}}"
+        bindtap="toggleTagSelection"
+        style="border: 1rpx solid {{item.color || '#ccc'}}; color: {{item.color || '#333'}}"
+      >
+        <text>{{item.name}}</text>
+      </view>
+      <view wx:if="{{allTags.length === 0}}" class="no-tags-tip">
+        <text>还没有标签，快去创建一个吧！</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 创建新标签 -->
+  <view class="create-tag-area">
+    <text class="section-title">创建新标签:</text>
+    <view class="create-input-group">
+      <input class="tag-input" 
+             placeholder="输入标签名称" 
+             value="{{newTagName}}" 
+             bindinput="onNewTagNameInput" />
+      <view class="color-picker">
+        <view class="color-dot" style="background-color: {{newTagColor}}" bindtap="showColorPicker"></view>
+      </view>
+      <button class="create-btn" bindtap="createNewTag">创建</button>
+    </view>
+  </view>
+
+  <!-- 颜色选择器 (隐藏) -->
+  <view class="color-picker-panel {{showColorPanel ? 'show' : ''}}">
+    <view class="color-option" 
+          wx:for="{{colorOptions}}" 
+          wx:key="*this" 
+          style="background-color: {{item}}" 
+          data-color="{{item}}" 
+          bindtap="selectColor">
+    </view>
+    <view class="close-color-picker" bindtap="hideColorPicker">×</view>
+  </view>
+</view> 
+</view> 
+</view>

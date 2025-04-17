@@ -1,0 +1,36 @@
+<!--pages/tag/tag-create/tag-create.wxml-->
+<navigation-bar title="{{mode === 'create' ? '新建标签' : '编辑标签'}}" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view class="tag-create-container">
+  <!-- 标签名称 -->
+  <view class="form-item">
+    <view class="form-label">标签名称</view>
+    <input class="form-input" placeholder="输入标签名称" value="{{tagName}}" bindinput="onInputName" maxlength="20" />
+  </view>
+  
+  <!-- 标签颜色 -->
+  <view class="form-item">
+    <view class="form-label">标签颜色</view>
+    <view class="color-picker">
+      <view 
+        class="color-item {{selectedColor === color ? 'selected' : ''}}" 
+        wx:for="{{colors}}" 
+        wx:key="*this" 
+        wx:for-item="color"
+        style="background-color: {{color}}"
+        bindtap="selectColor"
+        data-color="{{color}}"
+      >
+        <view class="selected-icon" wx:if="{{selectedColor === color}}">✓</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 标签描述 -->
+  <view class="form-item">
+    <view class="form-label">描述（可选）</view>
+    <textarea class="form-textarea" placeholder="输入标签描述" value="{{tagDescription}}" bindinput="onInputDescription" maxlength="100"></textarea>
+  </view>
+  
+  <!-- 创建按钮 -->
+  <view class="create-btn" bindtap="saveTag">{{mode === 'create' ? '创建' : '保存'}}</view>
+</view>
