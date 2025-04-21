@@ -1,0 +1,21 @@
+<!--pages/help/tutorial/tutorial.wxml-->
+<navigation-bar title="功能介绍/使用教程" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="tutorial-container">
+    <view class="tutorial-header">
+      <view class="tutorial-title">功能介绍/使用教程</view>
+      <view class="tutorial-subtitle">了解MarkMark的主要功能</view>
+    </view>
+    
+    <view class="features-list">
+      <view class="feature-item" wx:for="{{features}}" wx:key="title">
+        <view class="feature-title">{{item.title}}</view>
+        <view class="feature-description">{{item.description}}</view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+</view>

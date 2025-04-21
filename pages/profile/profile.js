@@ -234,7 +234,7 @@ Page({
     });
   },
   viewHelp: function() {
-    wx.showToast({ title: '帮助中心功能开发中', icon: 'none' });
+    wx.navigateTo({ url: '/pages/help/help' });
   },
   viewAbout: function() {
     wx.showModal({
@@ -977,9 +977,8 @@ Page({
   
   // --- 关于与帮助处理 ---
   viewHelp: function() {
-    // 可以跳转到帮助页面，或显示 Modal
-    wx.showToast({ title: '帮助中心功能开发中', icon: 'none' });
-    // wx.navigateTo({ url: '/pages/help/help' }); // 如果有帮助页面
+    // 跳转到帮助中心页面
+    wx.navigateTo({ url: '/pages/help/help' });
   },
   
   viewAbout: function() {

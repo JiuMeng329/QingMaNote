@@ -66,6 +66,20 @@ Page({
     });
   },
   
+  // 导航到创建标签页面
+  navigateToCreateTag: function() {
+    wx.navigateTo({
+      url: '/pages/tag/tag-create/tag-create'
+    });
+  },
+  
+  // 导入Markdown文档
+  importDocument: function() {
+    wx.navigateTo({
+      url: '/pages/import/import'
+    });
+  },
+  
   // // 选择文档类型 (暂时移除)
   // selectDocumentType: function() {
   //   wx.showToast({ title: '功能开发中', icon: 'none' });

@@ -1,0 +1,33 @@
+<!--pages/help/help.wxml-->
+<navigation-bar title="帮助中心" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="help-container">
+    <!-- 帮助中心标题 -->
+    <view class="help-header">
+      <view class="help-title">帮助中心</view>
+      <view class="help-subtitle">让您更好地使用MarkMark</view>
+    </view>
+
+    <!-- 帮助项列表 -->
+    <view class="help-list">
+      <view class="help-item" wx:for="{{helpItems}}" wx:key="id" data-path="{{item.path}}" bindtap="navigateToHelpItem">
+        <view class="item-left">
+          <view class="item-icon {{item.icon}}"></view>
+          <text class="item-text">{{item.title}}</text>
+        </view>
+        <view class="item-right">
+          <view class="arrow-icon">></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 版本信息 -->
+    <view class="version-info">
+      <text>当前版本：{{version}}</text>
+    </view>
+  </view>
+</scroll-view>
+
+</view>

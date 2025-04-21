@@ -1,0 +1,147 @@
+/* pages/help/markdown/markdown.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+}
+
+#page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: auto;
+  height: calc(100vh - 46px); /* 扣除 navigation-bar 高度 */
+}
+
+.markdown-container {
+  padding: 30rpx;
+  line-height: 1.6;
+}
+
+.markdown-container rich-text {
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+/* 块级元素样式 */
+.markdown-container h1,
+.markdown-container h2,
+.markdown-container h3,
+.markdown-container h4,
+.markdown-container h5,
+.markdown-container h6 {
+  font-weight: bold;
+  margin-top: 30rpx;
+  margin-bottom: 20rpx;
+  color: var(--text-color);
+}
+
+.markdown-container h1 {
+  font-size: 40rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  padding-bottom: 10rpx;
+}
+
+.markdown-container h2 {
+  font-size: 36rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  padding-bottom: 10rpx;
+}
+
+.markdown-container h3 {
+  font-size: 32rpx;
+}
+
+.markdown-container h4 {
+  font-size: 30rpx;
+}
+
+.markdown-container h5 {
+  font-size: 28rpx;
+}
+
+.markdown-container h6 {
+  font-size: 26rpx;
+}
+
+.markdown-container p {
+  margin-bottom: 20rpx;
+  line-height: 1.6;
+}
+
+.markdown-container ul,
+.markdown-container ol {
+  margin-bottom: 20rpx;
+  padding-left: 40rpx;
+}
+
+.markdown-container li {
+  margin-bottom: 10rpx;
+}
+
+.markdown-container blockquote {
+  border-left: 4rpx solid var(--primary-color);
+  padding-left: 20rpx;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 20rpx;
+  color: var(--text-secondary-color);
+}
+
+.markdown-container code {
+  font-family: monospace;
+  background-color: var(--code-bg-color);
+  border-radius: 4rpx;
+  padding: 4rpx 8rpx;
+  font-size: 26rpx;
+}
+
+.markdown-container pre {
+  background-color: var(--code-bg-color);
+  border-radius: 8rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  overflow-x: auto;
+}
+
+.markdown-container pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: var(--code-text-color);
+}
+
+.markdown-container table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20rpx;
+}
+
+.markdown-container th,
+.markdown-container td {
+  border: 1rpx solid var(--border-color);
+  padding: 10rpx;
+  text-align: left;
+}
+
+.markdown-container th {
+  background-color: var(--table-header-bg-color);
+}
+
+.markdown-container a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.markdown-container img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20rpx;
+  border-radius: 8rpx;
+} 

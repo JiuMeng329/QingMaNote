@@ -1,0 +1,100 @@
+/* pages/help/version/version.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+}
+
+#page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: auto;
+  height: calc(100vh - 46px); /* 扣除 navigation-bar 高度 */
+}
+
+.version-container {
+  padding: 30rpx;
+}
+
+/* 当前版本区域 */
+.version-header {
+  margin-bottom: 40rpx;
+  background-color: var(--card-bg-color);
+  border-radius: 12rpx;
+  padding: 30rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 10rpx var(--shadow-color);
+}
+
+.version-title {
+  font-size: 28rpx;
+  color: var(--text-secondary-color);
+  margin-bottom: 10rpx;
+}
+
+.current-version {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* 历史版本列表 */
+.version-history {
+  background-color: var(--card-bg-color);
+  border-radius: 12rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx var(--shadow-color);
+}
+
+.history-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 20rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  padding-bottom: 10rpx;
+}
+
+.version-item {
+  margin-bottom: 30rpx;
+}
+
+.version-item:last-child {
+  margin-bottom: 0;
+}
+
+.version-info {
+  margin-bottom: 10rpx;
+  display: flex;
+  align-items: baseline;
+}
+
+.version-number {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-right: 15rpx;
+}
+
+.version-date {
+  font-size: 24rpx;
+  color: var(--text-secondary-color);
+}
+
+.version-changes {
+  padding-left: 10rpx;
+}
+
+.change-item {
+  font-size: 28rpx;
+  color: var(--text-color);
+  margin-bottom: 8rpx;
+  line-height: 1.5;
+} 

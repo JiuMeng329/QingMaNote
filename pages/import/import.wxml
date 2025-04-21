@@ -1,0 +1,49 @@
+<view class="container" id="page-root">
+  <navigation-bar title="导入Markdown文件" showBack="{{true}}"></navigation-bar>
+  
+  <view class="header">
+    <text class="title">导入Markdown文件</text>
+    <text class="subtitle">支持从聊天记录或手机文件系统导入</text>
+  </view>
+
+  <button 
+    type="primary" 
+    bindtap="showImportOptions"
+    class="import-btn"
+  >
+    选择导入方式
+  </button>
+
+  <!-- 文件信息卡片 -->
+  <view class="file-card" wx:if="{{fileInfo}}">
+    <text class="file-name">{{fileInfo.name}}</text>
+    <text class="file-size">{{fileInfo.size}}</text>
+  </view>
+
+  <!-- 导入进度 -->
+  <view class="progress-container" wx:if="{{showProgress}}">
+    <progress 
+      percent="{{importProgress}}" 
+      stroke-width="6"
+      activeColor="var(--primary-color)"
+      backgroundColor="var(--progress-bg-color)"
+    />
+    <text class="progress-text">{{importStatus}}</text>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips">
+    <view class="tip-item">
+      <text class="tip-icon">✓</text>
+      <text>支持.md和.markdown格式</text>
+    </view>
+    <view class="tip-item">
+      <text class="tip-icon">✓</text>
+      <text>最大支持10MB的文件</text>
+    </view>
+    <view class="tip-item">
+      <text class="tip-icon">✓</text>
+      <text>自动格式化内容</text>
+    </view>
+  </view>
+</view> 

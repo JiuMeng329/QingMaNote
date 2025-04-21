@@ -1,0 +1,29 @@
+<!--pages/help/version/version.wxml-->
+<navigation-bar title="版本信息与更新日志" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="version-container">
+    <view class="version-header">
+      <view class="version-title">当前版本</view>
+      <view class="current-version">{{currentVersion}}</view>
+    </view>
+    
+    <view class="version-history">
+      <view class="history-title">更新日志</view>
+      <view class="version-item" wx:for="{{versionHistory}}" wx:key="version">
+        <view class="version-info">
+          <text class="version-number">{{item.version}}</text>
+          <text class="version-date">{{item.date}}</text>
+        </view>
+        <view class="version-changes">
+          <view class="change-item" wx:for="{{item.changes}}" wx:for-item="change" wx:key="*this">
+            • {{change}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+</view>

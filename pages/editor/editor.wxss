@@ -3,7 +3,7 @@ page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #F6F6F6;
+  background-color: var(--bg-color);
 }
 
 #page-root {
@@ -17,7 +17,7 @@ page {
 .nav-center {
   font-size: 34rpx;
   font-weight: 500;
-  color: #333333;
+  color: var(--text-color);
 }
 
 .nav-right {
@@ -34,12 +34,12 @@ page {
 
 .preview-icon {
   font-size: 40rpx;
-  color: #333333;
+  color: var(--text-color);
 }
 
 .more-icon {
   font-size: 40rpx;
-  color: #333333;
+  color: var(--text-color);
 }
 
 /* 编辑器容器 */
@@ -111,14 +111,127 @@ page {
   height: calc(100% - 166rpx); /* 减去工具栏和状态栏的高度 */
 }
 
-/* 全屏预览样式 */
+/* 预览区域样式 */
+.preview-area {
+  flex: 1;
+  background-color: var(--card-bg-color);
+  padding: 20rpx;
+  overflow-y: auto;
+}
+
+.preview-area.split-screen {
+  border-left: 1rpx solid var(--border-color);
+  background-color: var(--card-bg-color);
+}
+
 .preview-area.full-screen {
   flex: 1;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
+  background-color: var(--card-bg-color);
+  padding: 40rpx;
+  overflow-y: auto;
+}
+
+.markdown-content {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: var(--text-color);
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3,
+.markdown-content h4, .markdown-content h5, .markdown-content h6 {
+  font-weight: bold;
+  margin-top: 30rpx;
+  margin-bottom: 20rpx;
+  color: var(--text-color);
+}
+
+.markdown-content h1 {
+  font-size: 40rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  padding-bottom: 10rpx;
+}
+
+.markdown-content h2 {
+  font-size: 36rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  padding-bottom: 10rpx;
+}
+
+.markdown-content h3 {
+  font-size: 32rpx;
+}
+
+.markdown-content h4 {
+  font-size: 30rpx;
+}
+
+.markdown-content h5 {
+  font-size: 28rpx;
+}
+
+.markdown-content h6 {
+  font-size: 24rpx;
+}
+
+.markdown-content p {
+  margin-bottom: 16rpx;
+}
+
+.markdown-content ul, .markdown-content ol {
+  padding-left: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.markdown-content blockquote {
+  border-left: 4rpx solid var(--primary-color);
+  padding-left: 20rpx;
+  color: var(--text-secondary-color);
+  margin: 16rpx 0;
+}
+
+.markdown-content code {
+  background-color: var(--code-bg-color, #f5f5f5);
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+  font-family: monospace;
+  color: var(--code-text-color, #333);
+}
+
+.markdown-content pre {
+  background-color: var(--code-bg-color, #f5f5f5);
   padding: 20rpx;
-  box-sizing: border-box;
+  border-radius: 8rpx;
+  overflow-x: auto;
+  color: var(--code-text-color, #333);
+}
+
+.markdown-content a {
+  color: var(--primary-color, #3E7FFF);
+  text-decoration: underline;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  margin: 16rpx 0;
+  border-radius: 8rpx;
+}
+
+.markdown-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16rpx 0;
+}
+
+.markdown-content th, .markdown-content td {
+  border: 1rpx solid var(--border-color, #EEEEEE);
+  padding: 12rpx;
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: var(--table-header-bg-color, #f5f5f5);
+  font-weight: bold;
+  color: var(--text-color);
 }
 
 /* 分屏模式 */
@@ -132,18 +245,20 @@ page {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  background-color: var(--card-bg-color);
 }
 
 .editor-area.split-left {
   width: 50%;
-  border-right: 1rpx solid #EEEEEE;
+  border-right: 1rpx solid var(--border-color);
   padding: 24rpx;
+  background-color: var(--card-bg-color);
 }
 
 .preview-area.split-right {
   width: 50%;
   padding: 24rpx;
-  background-color: #FAFAFA;
+  background-color: var(--card-bg-color);
 }
 
 .markdown-textarea {
@@ -153,94 +268,6 @@ page {
   line-height: 1.6;
   color: var(--text-color);
   background-color: transparent;
-}
-
-/* Markdown内容样式 */
-.markdown-content {
-  font-size: var(--font-size-content);
-  line-height: 1.6;
-  color: var(--text-color);
-}
-
-.markdown-content h1 {
-  font-size: 40rpx;
-  font-weight: bold;
-  margin: 30rpx 0 20rpx 0;
-  padding-bottom: 10rpx;
-  border-bottom: 1rpx solid #EEEEEE;
-}
-
-.markdown-content h2 {
-  font-size: 36rpx;
-  font-weight: bold;
-  margin: 28rpx 0 18rpx 0;
-}
-
-.markdown-content h3 {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin: 26rpx 0 16rpx 0;
-}
-
-.markdown-content p {
-  margin: 16rpx 0;
-}
-
-.markdown-content ul, .markdown-content ol {
-  margin: 16rpx 0;
-  padding-left: 40rpx;
-}
-
-.markdown-content li {
-  margin: 8rpx 0;
-}
-
-.markdown-content blockquote {
-  border-left: 8rpx solid #EEEEEE;
-  padding-left: 20rpx;
-  color: #666666;
-  margin: 16rpx 0;
-}
-
-.markdown-content code {
-  background-color: var(--bg-color);
-  padding: 4rpx 8rpx;
-  border-radius: 4rpx;
-  font-family: monospace;
-}
-
-.markdown-content pre {
-  background-color: var(--bg-color);
-  padding: 20rpx;
-  border-radius: 8rpx;
-  overflow-x: auto;
-}
-
-.markdown-content a {
-  color: #3E7FFF;
-  text-decoration: underline;
-}
-
-.markdown-content img {
-  max-width: 100%;
-  margin: 16rpx 0;
-}
-
-.markdown-content table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 16rpx 0;
-}
-
-.markdown-content th, .markdown-content td {
-  border: 1rpx solid #EEEEEE;
-  padding: 12rpx;
-  text-align: left;
-}
-
-.markdown-content th {
-  background-color: var(--bg-color);
-  font-weight: bold;
 }
 
 /* 底部状态栏 */

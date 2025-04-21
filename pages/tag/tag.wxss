@@ -1,22 +1,18 @@
 /**tag.wxss**/
-#page-root { background-color: var(--bg-color);
+#page-root { 
+  background-color: var(--bg-color);
   color: var(--text-color);
   min-height: 100vh;
   display: flex;
-  flex-direction: column;}
-page {height: 100vh;
+  flex-direction: column;
+}
+
+page {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  /* background-color: var(--bg-color); */ }
-
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  background-color: var(--card-bg-color); /* Use variable */
-  border-radius: 30rpx;
-  padding: 15rpx 20rpx;
-  box-shadow: 0 2rpx 10rpx var(--shadow-color); /* Use variable */}
-
+  /* background-color: var(--bg-color); */ 
+}
 
 .tag-container {
   padding: 30rpx;
@@ -103,7 +99,6 @@ page {height: 100vh;
   align-items: center;
   margin-left: 10rpx;
 }
-
 
 .action-btn.edit .icon {
   color: var(--primary-color); /* Use variable */

@@ -94,6 +94,12 @@ page {
   margin-bottom: 20rpx;
   color: #FFFFFF;
   font-size: 24rpx;
+  background-color: var(--tag-color, #1890FF); /* 添加背景颜色，使用CSS变量 */
+}
+
+.tag-item.selected {
+  border: 2rpx solid #FFFFFF;
+  box-shadow: 0 0 0 2rpx var(--tag-color); /* 添加选中效果 */
 }
 
 .add-tag {
@@ -121,19 +127,38 @@ page {
 }
 
 .create-btn {
-  background-color: #3E7FFF;
-  color: #FFFFFF;
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 40rpx;
+  height: 88rpx;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 30rpx;
-  font-weight: 500;
+  margin-bottom: 30rpx;
+}
+
+.import-btn {
+  height: 88rpx;
+  background-color: #fff;
+  color: var(--primary-color);
+  border: 2rpx solid var(--primary-color);
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}
+
+.create-btn[disabled] {
+  background-color: #ccc !important;
+  color: var(--text-color-inverse);
 }
 
 .create-tip {
-  font-size: 24rpx;
-  color: #999;
   text-align: center;
+  font-size: 24rpx;
+  color: var(--text-secondary-color);
   margin-top: 30rpx;
 }
 

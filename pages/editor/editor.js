@@ -64,6 +64,49 @@ Page({
         documentId: options.id
       });
       this.loadDocument(options.id);
+    } else if (options.source === 'import') {
+      // 处理从导入页面过来的内容
+      const importedContent = app.globalData.importedMarkdown || '';
+      const filename = options.filename ? decodeURIComponent(options.filename) : '导入文档.md';
+      const title = filename.replace(/\.md$|\.markdown$/i, '');
+      
+      this.setData({
+        documentTitle: title,
+        content: importedContent
+      });
+      
+      // 创建新文档并保存导入内容
+      const docId = documentUtils.createDocument({
+        title: title,
+        content: importedContent
+      });
+      
+      if (docId) {
+        this.setData({
+          documentId: docId
+        });
+        
+        // 计算字数
+        this.updateWordCount(importedContent);
+        
+        // 添加到历史记录
+        this.addToHistory(importedContent);
+        
+        // 如果启用了拼写检查，则触发检查
+        if (this.data.spellCheckEnabled && this.data.spellChecker) {
+          this.triggerSpellCheck();
+        }
+        
+        // 如果启用了实时预览，渲染内容
+        if (this.data.livePreview) {
+          this.renderMarkdown();
+        }
+        
+        wx.showToast({
+          title: '导入成功',
+          icon: 'success'
+        });
+      }
     } else if (options.title) {
       // 创建新文档
       this.setData({
@@ -301,6 +344,14 @@ Page({
     this.handleSpellCheckOnChange();
   },
   
+  // 更新字数统计
+  updateWordCount: function(content) {
+    if (!content) return 0;
+    const wordCount = markdownUtils.countWords(content);
+    this.setData({ wordCount: wordCount });
+    return wordCount;
+  },
+  
   // 跟踪光标位置 (用于 Markdown 插入)
   onTextareaCursor: function(e) {
     if (e.detail && e.detail.cursor !== undefined) {
@@ -467,34 +518,364 @@ Page({
     this.setData({ showMenu: false });
   },
   
-  // 分享文档 (占位)
-  shareDocument: function() {
-    this.hideMoreMenu();
-    wx.showShareMenu({
-      withShareTicket: true,
-      menus: ['shareAppMessage', 'shareTimeline']
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+    // 确保文档数据已更新
+    this.saveDocument();
+    
+    const title = this.data.documentTitle || 'MarkMark文档';
+    const content = this.data.content || '';
+    // 获取内容摘要（前100个字符）
+    const description = content.length > 100 ? content.substring(0, 100) + '...' : content;
+    
+    return {
+      title: title,
+      desc: description,
+      path: `/pages/document/document?id=${this.data.documentId}`,
+      imageUrl: '/images/share-default-image.png'
+    };
+  },
+  
+  /**
+   * 用户点击右上角分享到朋友圈
+   */
+  onShareTimeline: function () {
+    // 确保文档数据已更新
+    this.saveDocument();
+    
+    const title = this.data.documentTitle || 'MarkMark文档';
+    // 朋友圈分享描述更短
+    const content = this.data.content || '';
+    const description = content.length > 50 ? content.substring(0, 50) + '...' : content;
+    
+    return {
+      title: `${title} - ${description}`,
+      query: `id=${this.data.documentId}&source=timeline`,
+      imageUrl: '/images/share-default-image.png'
+    };
+  },
+  
+  /**
+   * 显示更多操作菜单
+   */
+  showMoreOptions: function() {
+    const that = this;
+    wx.showActionSheet({
+      itemList: ['拼写检查', '导出PDF', '导出Markdown', '导出HTML', '导出Word', '分享文档'],
+      success: function(res) {
+        switch (res.tapIndex) {
+          case 0: // 拼写检查
+            that.toggleSpellCheck();
+            break;
+          case 1: // 导出PDF
+            wx.showLoading({ title: '导出PDF中...' });
+            that.exportAsPDF();
+            break;
+          case 2: // 导出Markdown
+            wx.showLoading({ title: '导出Markdown中...' });
+            that.exportAsMD();
+            break;
+          case 3: // 导出HTML
+            wx.showLoading({ title: '导出HTML中...' });
+            that.exportAsHTML();
+            break;
+          case 4: // 导出Word
+            wx.showLoading({ title: '导出Word中...' });
+            that.exportAsWord();
+            break;
+          case 5: // 分享文档
+            that.shareDocument();
+            break;
+        }
+      }
     });
-     wx.showToast({ title: '请点击右上角分享', icon: 'none' });
+  },
+  
+  /**
+   * 分享文档
+   */
+  shareDocument: function() {
+    const that = this;
+    wx.showActionSheet({
+      itemList: ['生成分享图片', '分享到聊天', '分享到朋友圈'],
+      success: function(res) {
+        switch (res.tapIndex) {
+          case 0: // 生成分享图片
+            that.generateShareImage();
+            break;
+          case 1: // 分享到聊天
+            wx.showShareMenu({
+              withShareTicket: true,
+              menus: ['shareAppMessage']
+            });
+            wx.showToast({
+              title: '请点击右上角分享给朋友',
+              icon: 'none',
+              duration: 2000
+            });
+            break;
+          case 2: // 分享到朋友圈
+            wx.showShareMenu({
+              withShareTicket: true,
+              menus: ['shareTimeline']
+            });
+            wx.showToast({
+              title: '请点击右上角分享到朋友圈',
+              icon: 'none',
+              duration: 2000
+            });
+            break;
+        }
+      }
+    });
+  },
+  
+  /**
+   * 生成分享图片
+   */
+  generateShareImage: function() {
+    const that = this;
+    wx.showLoading({ title: '生成分享图片中...' });
+    
+    // 创建离屏canvas
+    const canvas = wx.createOffscreenCanvas({
+      type: '2d', 
+      width: 750, 
+      height: 1000
+    });
+    
+    // 获取2d上下文
+    const ctx = canvas.getContext('2d');
+    
+    // 设置画布大小
+    const canvasWidth = 750;
+    const canvasHeight = 1000;
+    
+    // 绘制背景
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    
+    // 绘制标题区域背景
+    ctx.fillStyle = '#f0f8ff';
+    ctx.fillRect(0, 0, canvasWidth, 160);
+    
+    // 绘制标题
+    ctx.font = 'bold 40px sans-serif';
+    ctx.fillStyle = '#333333';
+    ctx.textAlign = 'center';
+    const title = this.data.documentTitle || 'MarkMark文档';
+    ctx.fillText(title, canvasWidth / 2, 100);
+    
+    // 绘制内容预览
+    ctx.font = '30px sans-serif';
+    ctx.fillStyle = '#666666';
+    ctx.textAlign = 'left';
+    
+    // 获取内容摘要
+    const content = this.data.content || '空文档';
+    const previewLines = content.split('\n').slice(0, 10);
+    let y = 200;
+    
+    previewLines.forEach((line, index) => {
+      if (index < 8) {
+        // 限制每行长度
+        const displayLine = line.length > 26 ? line.substring(0, 26) + '...' : line;
+        ctx.fillText(displayLine, 50, y);
+        y += 60;
+      } else if (index === 8) {
+        ctx.fillText('...', 50, y);
+      }
+    });
+    
+    // 绘制底部信息
+    ctx.font = '28px sans-serif';
+    ctx.fillStyle = '#999999';
+    ctx.textAlign = 'center';
+    ctx.fillText('由MarkMark生成的Markdown文档', canvasWidth / 2, canvasHeight - 100);
+    ctx.fillText('打开小程序查看完整内容', canvasWidth / 2, canvasHeight - 50);
+    
+    // 添加小程序码或应用图标
+    const logoSize = 80;
+    ctx.fillStyle = '#333333';
+    ctx.beginPath();
+    ctx.arc(canvasWidth / 2, canvasHeight - 200, logoSize / 2, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 导出图片
+    try {
+      // 从离屏Canvas导出图片
+      const tempFilePath = `${wx.env.USER_DATA_PATH}/share_${Date.now()}.png`;
+      const buffer = canvas.toDataURL({
+        fileType: 'png',
+        quality: 1
+      });
+      
+      // 保存图片到本地文件系统
+      const fs = wx.getFileSystemManager();
+      fs.writeFileSync(
+        tempFilePath,
+        buffer.replace(/^data:image\/\w+;base64,/, ""),
+        'base64'
+      );
+      
+      // 保存到相册
+      wx.saveImageToPhotosAlbum({
+        filePath: tempFilePath,
+        success: function() {
+          wx.hideLoading();
+          wx.showToast({
+            title: '分享图片已保存到相册',
+            icon: 'success'
+          });
+        },
+        fail: function(err) {
+          wx.hideLoading();
+          console.error('保存图片失败:', err);
+          
+          // 提示用户授权保存图片
+          if (err.errMsg.indexOf('auth deny') >= 0 || err.errMsg.indexOf('authorize') >= 0) {
+            wx.showModal({
+              title: '提示',
+              content: '需要您授权保存图片到相册',
+              confirmText: '去授权',
+              success(modalRes) {
+                if (modalRes.confirm) {
+                  wx.openSetting({
+                    success(settingRes) {
+                      if (settingRes.authSetting['scope.writePhotosAlbum']) {
+                        wx.showToast({
+                          title: '授权成功，请重新保存',
+                          icon: 'none'
+                        });
+                      } else {
+                        wx.showToast({
+                          title: '授权失败，无法保存图片',
+                          icon: 'none'
+                        });
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          } else {
+            wx.showToast({
+              title: '保存失败，请重试',
+              icon: 'none'
+            });
+          }
+        }
+      });
+    } catch (err) {
+      wx.hideLoading();
+      console.error('生成分享图片失败:', err);
+      wx.showToast({
+        title: '生成图片失败',
+        icon: 'none'
+      });
+    }
+  },
+  
+  /**
+   * 导出为Markdown文件并分享
+   */
+  exportAsMD: function() {
+    const that = this;
+    // 确保文档已保存
+    this.saveDocument();
+    
+    const exportUtil = require('../../utils/exportUtil');
+    const title = that.data.documentTitle || 'document';
+    const content = that.data.content || '';
+    const filename = `${title}.md`;
+    
+    // 使用导出工具
+    exportUtil.exportMarkdown(content, filename)
+      .then(filePath => {
+        wx.hideLoading();
+        console.log('Markdown文件导出成功:', filePath);
+      })
+      .catch(error => {
+        wx.hideLoading();
+        console.error('Markdown导出失败:', error);
+        let errorMsg = '导出失败';
+        
+        // 提供更具体的错误信息
+        if (error && error.message) {
+          if (error.message.includes('权限被拒绝')) {
+            errorMsg = '权限被拒绝，无法保存';
+          } else if (error.message.includes('不存在')) {
+            errorMsg = '文件创建失败';
+          } else if (error.message.includes('不支持的操作')) {
+            errorMsg = '操作不支持，请更新微信';
+          } else {
+            errorMsg = error.message.substring(0, 20); // 取部分错误信息显示
+          }
+        }
+        
+        wx.showToast({
+          title: errorMsg,
+          icon: 'none',
+          duration: 2000
+        });
+      });
+  },
+  
+  /**
+   * 导出为HTML文件并分享
+   */
+  exportAsHTML: function() {
+    const that = this;
+    // 确保文档已保存
+    this.saveDocument();
+    
+    const exportUtil = require('../../utils/exportUtil');
+    const title = that.data.documentTitle || 'document';
+    const content = that.data.content || '';
+    const filename = `${title}.html`;
+    
+    // 使用导出工具
+    exportUtil.exportHTML(content, title, filename)
+      .then(filePath => {
+        wx.hideLoading();
+        console.log('HTML文件导出成功:', filePath);
+      })
+      .catch(error => {
+        wx.hideLoading();
+        console.error('HTML导出失败:', error);
+        let errorMsg = '导出失败';
+        
+        // 提供更具体的错误信息
+        if (error && error.message) {
+          if (error.message.includes('权限被拒绝')) {
+            errorMsg = '权限被拒绝，无法保存';
+          } else if (error.message.includes('不存在')) {
+            errorMsg = '文件创建失败';
+          } else if (error.message.includes('不支持的操作')) {
+            errorMsg = '操作不支持，请更新微信';
+          } else {
+            errorMsg = error.message.substring(0, 20); // 取部分错误信息显示
+          }
+        }
+        
+        wx.showToast({
+          title: errorMsg,
+          icon: 'none',
+          duration: 2000
+        });
+      });
   },
 
-  // 导出为 Markdown (复制到剪贴板)
-  exportAsMD: function() {
-    this.hideMoreMenu();
-    const filename = `${this.data.documentTitle || 'document'}.md`;
-    exportMarkdown(this.data.content, filename); // Use util function
-  },
-  
-  // 导出为 HTML (复制到剪贴板)
-  exportAsHTML: function() {
-    this.hideMoreMenu();
-    const filename = `${this.data.documentTitle || 'document'}.html`;
-    exportHTML(this.data.content, this.data.documentTitle, filename); // Use util function
-  },
-  
-  // 导出为 PDF (占位)
+  // 导出为 PDF
   exportAsPDF: function() {
     this.hideMoreMenu();
-    wx.showLoading({ title: '生成中...', mask: true });
+    wx.showLoading({ title: '准备文档...', mask: true });
+    
+    // 确保文档已保存
+    this.saveDocument();
+    
     const filename = `${this.data.documentTitle || 'document'}.pdf`; // Filename for the saved PNG
     const renderContainerId = 'pdf-render-container';
     
@@ -502,32 +883,92 @@ Page({
     const initData = {};
     initData[`${renderContainerId}_html`] = '';
     initData[`${renderContainerId}_show`] = false;
-    this.setData(initData);
-    
-    // Call the exportPDF utility function, passing the page instance (`this`)
-    exportPDF(this.data.content, this, renderContainerId, filename)
-      .then(savedPath => {
-        console.log('PDF (image) exported to:', savedPath);
-        // Optionally open the saved image file
-        // wx.openDocument({ filePath: savedPath, showMenu: true });
-      })
-      .catch(err => {
-        console.error('PDF 导出失败:', err);
-        wx.showToast({ title: typeof err === 'string' ? err : 'PDF导出失败', icon: 'error' });
-      })
-      .finally(() => {
+    this.setData(initData, () => {
+      try {
+        // 引入导出工具
+        const { exportPDF } = require('../../utils/exportUtil');
+        
+        // 在下一个渲染周期调用导出函数
+        setTimeout(() => {
+          // 调用导出PDF函数
+          exportPDF(this.data.content, this, renderContainerId, filename)
+            .then(savedPath => {
+              console.log('PDF (image) exported to:', savedPath);
+              wx.hideLoading();
+            })
+            .catch(err => {
+              console.error('PDF 导出失败:', err);
+              wx.hideLoading();
+              let errorMsg = '导出失败';
+              
+              // 提供更具体的错误信息
+              if (typeof err === 'string') {
+                errorMsg = err.length > 20 ? err.substring(0, 20) + '...' : err;
+              } else if (err && err.message) {
+                errorMsg = err.message.length > 20 ? err.message.substring(0, 20) + '...' : err.message;
+              }
+              
+              wx.showToast({ 
+                title: errorMsg, 
+                icon: 'none',
+                duration: 2000
+              });
+            });
+        }, 300);
+      } catch (error) {
+        console.error('准备PDF导出时出错:', error);
         wx.hideLoading();
-        // 确保使用动态key隐藏渲染容器
-        const hideData = {};
-        hideData[`${renderContainerId}_show`] = false;
-        this.setData(hideData);
-      });
+        wx.showToast({
+          title: '导出初始化失败',
+          icon: 'none'
+        });
+      }
+    });
   },
   
-  // 导出为 Word (占位)
+  // 导出为 Word
   exportAsWord: function() {
     this.hideMoreMenu();
-    wx.showToast({ title: '导出Word功能开发中', icon: 'none' });
+    wx.showLoading({ title: '导出Word中...', mask: true });
+    
+    // 确保文档已保存
+    this.saveDocument();
+    
+    const exportUtil = require('../../utils/exportUtil');
+    const title = this.data.documentTitle || 'document';
+    const content = this.data.content || '';
+    const filename = `${title}.docx`;
+    
+    // 使用导出工具
+    exportUtil.exportWord(content, title, filename)
+      .then(filePath => {
+        // 隐藏loading是在exportWord内部处理的
+        console.log('Word文件导出成功:', filePath);
+      })
+      .catch(error => {
+        wx.hideLoading();
+        console.error('Word导出失败:', error);
+        let errorMsg = '导出失败';
+        
+        // 提供更具体的错误信息
+        if (error && error.message) {
+          if (error.message.includes('权限被拒绝')) {
+            errorMsg = '权限被拒绝，无法保存';
+          } else if (error.message.includes('不存在')) {
+            errorMsg = '文件创建失败';
+          } else if (error.message.includes('不支持的操作')) {
+            errorMsg = '操作不支持，请更新微信';
+          } else {
+            errorMsg = error.message.substring(0, 20); // 取部分错误信息显示
+          }
+        }
+        
+        wx.showToast({
+          title: errorMsg,
+          icon: 'none',
+          duration: 2000
+        });
+      });
   },
   
   // 修改标签 (跳转到标签选择页)
@@ -554,22 +995,6 @@ Page({
     wx.showToast({ title: '历史版本功能开发中', icon: 'none' });
   },
   
-  // --- 页面事件处理 ---
-  // 允许页面分享
-  onShareAppMessage: function() {
-    return {
-      title: this.data.documentTitle || '分享文档',
-      path: '/pages/editor/editor?id=' + this.data.documentId
-    };
-  },
-  
-  onShareTimeline: function() {
-    return {
-      title: this.data.documentTitle || '分享文档',
-      query: 'id=' + this.data.documentId
-    };
-  },
-
   // 应用全局样式
   applyGlobalStyle: function() {
     const app = getApp();

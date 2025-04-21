@@ -12,7 +12,12 @@
     "pages/tag/tag-create/tag-create",
     "pages/tag/tag-detail/tag-detail",
     "pages/search/search",
-    "pages/more/more"
+    "pages/more/more",
+    "pages/import/import",
+    "pages/help/help",
+    "pages/help/markdown/markdown",
+    "pages/help/tutorial/tutorial",
+    "pages/help/version/version"
   ],
   "window": {
     "backgroundTextStyle": "light",

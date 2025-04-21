@@ -148,11 +148,11 @@
     </view>
     <view class="menu-item" bindtap="exportAsPDF">
       <text class="menu-icon">📑</text>
-      <text class="menu-text">导出为 PDF (开发中)</text>
+      <text class="menu-text">导出为 PDF</text>
     </view>
     <view class="menu-item" bindtap="exportAsWord">
       <text class="menu-icon">📝</text>
-      <text class="menu-text">导出为 Word (开发中)</text>
+      <text class="menu-text">导出为 Word</text>
     </view>
     <view class="menu-item" bindtap="modifyTags">
       <text class="menu-icon">🏷️</text>
@@ -175,13 +175,13 @@
 <!-- PDF Render Target (New and Hidden) -->
 <view id="pdf-render-container" 
       class="pdf-render-target" 
-      style="position:absolute; top:-9999px; left: -9999px; width: 750px; background: white; {{pdfRenderContainer_show ? '' : 'display:none;'}}">
+      style="position:fixed; width:750px; height:1000px; background:white; z-index:-1; {{pdfRenderContainer_show ? 'visibility:visible;' : 'visibility:hidden;'}}">
   <!-- Use a canvas component for rendering -->
-  <canvas type="2d" id="pdf-canvas" style="width: 750px; height: 1px;"></canvas> 
-  <!-- Rich text inside canvas might not work directly, render logic is complex. -->
-  <!-- The JS now uses the fields API with node:true to get the canvas node -->
-  <!-- We might still need a rich-text here IF the canvas approach needs it for layout calculation -->
-  <rich-text nodes="{{pdfRenderContainer_html}}"></rich-text> 
+  <canvas type="2d" id="pdf-canvas" style="width:750px; height:1000px;"></canvas> 
+  <!-- 使用容器包装rich-text确保能正确测量高度 -->
+  <view class="pdf-content-wrapper" style="width:750px; padding:20px;">
+    <rich-text nodes="{{pdfRenderContainer_html}}"></rich-text>
+  </view>
 </view>
 
 </view>
