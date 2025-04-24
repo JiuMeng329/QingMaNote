@@ -44,7 +44,9 @@ Page({
     spellChecker: null, // Spell checker instance
     // --- PDF Export State (New) ---
     pdfRenderContainer_html: '', // Used by exportPDF
-    pdfRenderContainer_show: false // Used by exportPDF
+    pdfRenderContainer_show: false, // Used by exportPDF
+    lineHeight: 0,
+    lineCount: 0
   },
 
   onLoad: function(options) {
@@ -356,8 +358,42 @@ Page({
   onTextareaCursor: function(e) {
     if (e.detail && e.detail.cursor !== undefined) {
       this.setData({
-        'cursorPosition.start': e.detail.cursor,
-        'cursorPosition.end': e.detail.cursor
+        cursorPosition: {
+          start: e.detail.cursor,
+          end: e.detail.cursor
+        }
+      });
+    }
+  },
+  
+  // 文本区域获得焦点时触发
+  onTextareaFocus: function(e) {
+    // 这里可以添加获取焦点相关逻辑
+    console.log('Textarea focused');
+  },
+
+  // 文本区域失去焦点时触发
+  onTextareaBlur: function(e) {
+    // 在失去焦点时保存文档
+    this.saveDocument();
+  },
+
+  // 文本区域行号变化时触发
+  onTextareaLineChange: function(e) {
+    // 更新行号，可用于精确定位光标
+    console.log('Line changed:', e.detail);
+    if (e.detail && e.detail.lineHeight !== undefined) {
+      this.data.lineHeight = e.detail.lineHeight;
+    }
+    if (e.detail && e.detail.lineCount !== undefined) {
+      this.data.lineCount = e.detail.lineCount;
+    }
+    if (e.detail && e.detail.selectionStart !== undefined && e.detail.selectionEnd !== undefined) {
+      this.setData({
+        cursorPosition: {
+          start: e.detail.selectionStart,
+          end: e.detail.selectionEnd
+        }
       });
     }
   },
@@ -454,13 +490,59 @@ Page({
         this.chooseImage();
         return;
     }
+    
+    // 特殊处理代码块，可以选择语言
+    if (type === 'codeblock') {
+        const { content, cursorPosition } = this.data;
+        
+        wx.showActionSheet({
+          itemList: ['普通代码块', 'JavaScript', 'Python', 'HTML', 'CSS', 'Java', 'C++', 'Go', 'SQL'],
+          success: (res) => {
+            let codeBlockPrefix = '```\n';
+            if (res.tapIndex > 0) {
+              // 选择了特定语言
+              const languages = ['', 'javascript', 'python', 'html', 'css', 'java', 'cpp', 'go', 'sql'];
+              codeBlockPrefix = '```' + languages[res.tapIndex] + '\n';
+            }
+            
+            // 插入代码块
+            const selectedText = content.substring(cursorPosition.start, cursorPosition.end);
+            const newContent = content.substring(0, cursorPosition.start) + 
+                             codeBlockPrefix + 
+                             selectedText + 
+                             '\n```' + 
+                             content.substring(cursorPosition.end);
+            
+            const newCursorPos = {
+              start: cursorPosition.start + codeBlockPrefix.length,
+              end: cursorPosition.start + codeBlockPrefix.length + selectedText.length
+            };
+            
+            this.setData({ 
+              content: newContent, 
+              cursorPosition: newCursorPos,
+              saveStatus: '编辑中...' 
+            });
+            this.addToHistory(newContent);
+            if (this.data.livePreview && this.data.editMode === 'split') {
+              this.renderMarkdownDebounced();
+            }
+          }
+        });
+        return;
+    }
+    
     const { content, cursorPosition } = this.data;
     // 调用 editorUtils 处理插入逻辑
-    const { newContent } = editorUtils.insertMarkdownSyntax(content, cursorPosition, type);
+    const { newContent, selection } = editorUtils.insertMarkdownSyntax(content, cursorPosition, type);
     if (newContent !== content) {
-        this.setData({ content: newContent, saveStatus: '编辑中...' });
+        this.setData({ 
+            content: newContent, 
+            cursorPosition: selection || cursorPosition, 
+            saveStatus: '编辑中...' 
+        });
         this.addToHistory(newContent);
-         if (this.data.livePreview && this.data.editMode === 'split') {
+        if (this.data.livePreview && this.data.editMode === 'split') {
             this.renderMarkdownDebounced();
         }
     }
@@ -1005,15 +1087,57 @@ Page({
 
   // 更新主题状态
   updateTheme() {
-    this.setData({ theme: app.getCurrentTheme() });
-    // Potentially update navigation bar color based on theme?
+    const currentTheme = app.getCurrentTheme();
+    this.setData({ theme: currentTheme });
+    
+    // 更新导航栏组件主题
+    this.updateNavBarComponentTheme(currentTheme);
+    
+    // 根据主题更新导航栏颜色
+    this.updateNavBarStyle(currentTheme);
   },
 
   // 主题变化回调
   onThemeChange(theme) {
     console.log('Editor page received theme change:', theme);
     this.setData({ theme: theme });
-    // Potentially update navigation bar color based on theme?
+    
+    // 更新导航栏组件主题
+    this.updateNavBarComponentTheme(theme);
+    
+    // 根据主题更新导航栏颜色
+    this.updateNavBarStyle(theme);
+  },
+  
+  // 更新导航栏组件主题
+  updateNavBarComponentTheme(theme) {
+    const navBar = this.selectComponent('navigation-bar');
+    if (navBar && typeof navBar.onThemeChange === 'function') {
+      navBar.onThemeChange(theme);
+    }
+  },
+
+  // 根据主题更新导航栏样式
+  updateNavBarStyle(theme) {
+    let frontColor = '#000000';
+    let backgroundColor = '#FFFFFF';
+    
+    if (theme === 'dark') {
+      frontColor = '#FFFFFF';
+      backgroundColor = '#1E1E1E';
+    } else if (theme === 'github') {
+      frontColor = '#c9d1d9';
+      backgroundColor = '#161b22';
+    }
+    
+    wx.setNavigationBarColor({
+      frontColor: frontColor,
+      backgroundColor: backgroundColor,
+      animation: {
+        duration: 300,
+        timingFunc: 'easeInOut'
+      }
+    });
   },
 
   // --- Spell Check Methods ---

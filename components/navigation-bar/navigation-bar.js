@@ -50,12 +50,19 @@ Component({
       type: Number,
       value: 1
     },
+    // 添加主题属性
+    theme: {
+      type: String,
+      value: 'light'
+    }
   },
   /**
    * 组件的初始数据
    */
   data: {
-    displayStyle: ''
+    displayStyle: '',
+    calculatedBackground: '',
+    calculatedColor: ''
   },
   lifetimes: {
     attached() {
@@ -76,6 +83,9 @@ Component({
         // 使用状态栏高度和安全区域顶部高度的最大值，确保在所有机型上都有足够的顶部空间
         safeAreaTop: `height: calc(var(--height) + ${statusBarHeight}px); padding-top: ${statusBarHeight}px`
       })
+      
+      // 初始化主题颜色
+      this.updateThemeColors(this.properties.theme);
     },
   },
   /**
@@ -104,6 +114,40 @@ Component({
         })
       }
       this.triggerEvent('back', { delta: data.delta }, {})
+    },
+    // 添加主题响应方法
+    onThemeChange(theme) {
+      console.log('Navigation bar received theme change:', theme);
+      this.setData({ theme: theme });
+      this.updateThemeColors(theme);
+    },
+    
+    // 根据主题更新颜色
+    updateThemeColors(theme) {
+      // 如果外部指定了背景和颜色，则优先使用外部指定的值
+      if (this.properties.background && this.properties.color) {
+        this.setData({
+          calculatedBackground: this.properties.background,
+          calculatedColor: this.properties.color
+        });
+        return;
+      }
+      
+      let backgroundColor = '#FFFFFF';
+      let textColor = '#000000';
+      
+      if (theme === 'dark') {
+        backgroundColor = '#1E1E1E';
+        textColor = '#FFFFFF';
+      } else if (theme === 'github') {
+        backgroundColor = '#161b22';
+        textColor = '#c9d1d9';
+      }
+      
+      this.setData({
+        calculatedBackground: backgroundColor,
+        calculatedColor: textColor
+      });
     }
   },
 })

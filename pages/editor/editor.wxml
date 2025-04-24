@@ -1,7 +1,7 @@
 <view class="theme-{{theme}}">
 <view id="page-root">
 <!--pages/editor/editor.wxml-->
-<navigation-bar title="{{documentTitle}}" back="{{true}}" color="black" background="#FFF">
+<navigation-bar title="{{documentTitle}}" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}">
   <view slot="center" class="nav-center">
     <text>{{documentTitle}}</text>
   </view>
@@ -12,38 +12,77 @@
   <view class="toolbar">
     <scroll-view scroll-x="true" class="toolbar-scroll">
       <view class="toolbar-inner">
+        <!-- 一级标题 -->
         <view class="tool-item" bindtap="formatText" data-type="h1">
-          <text class="tool-icon">H₁</text>
+          <image class="tool-icon" src="/image/icon_heading1.svg" mode="aspectFit"></image>
         </view>
+        <!-- 二级标题 -->
         <view class="tool-item" bindtap="formatText" data-type="h2">
-          <text class="tool-icon">H₂</text>
+          <image class="tool-icon" src="/image/icon_heading2.svg" mode="aspectFit"></image>
         </view>
+        <!-- 三级标题 -->
+        <view class="tool-item" bindtap="formatText" data-type="h3">
+          <image class="tool-icon" src="/image/icon_heading3.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 分隔符 -->
+        <view class="tool-separator"></view>
+        <!-- 粗体 -->
         <view class="tool-item" bindtap="formatText" data-type="bold">
-          <text class="tool-icon">B</text>
+          <image class="tool-icon" src="/image/icon_bold.svg" mode="aspectFit"></image>
         </view>
+        <!-- 斜体 -->
         <view class="tool-item" bindtap="formatText" data-type="italic">
-          <text class="tool-icon">I</text>
+          <image class="tool-icon" src="/image/icon_italic.svg" mode="aspectFit"></image>
         </view>
+        <!-- 删除线 -->
+        <view class="tool-item" bindtap="formatText" data-type="strikethrough">
+          <image class="tool-icon" src="/image/icon_strikethrough.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 分隔符 -->
+        <view class="tool-separator"></view>
+        <!-- 无序列表 -->
         <view class="tool-item" bindtap="formatText" data-type="list-ul">
-          <text class="tool-icon">•</text>
+          <image class="tool-icon" src="/image/icon_unordered_list.svg" mode="aspectFit"></image>
         </view>
+        <!-- 有序列表 -->
         <view class="tool-item" bindtap="formatText" data-type="list-ol">
-          <text class="tool-icon">1.</text>
+          <image class="tool-icon" src="/image/icon_ordered_list.svg" mode="aspectFit"></image>
         </view>
+        <!-- 任务列表 -->
+        <view class="tool-item" bindtap="formatText" data-type="task">
+          <image class="tool-icon" src="/image/icon_task.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 分隔符 -->
+        <view class="tool-separator"></view>
+        <!-- 行内代码 -->
         <view class="tool-item" bindtap="formatText" data-type="quote">
-          <text class="tool-icon">"</text>
+          <image class="tool-icon" src="/image/icon_code.svg" mode="aspectFit"></image>
         </view>
+        <!-- 引用 -->
         <view class="tool-item" bindtap="formatText" data-type="code">
-          <text class="tool-icon">&lt;/&gt;</text>
+          <image class="tool-icon" src="/image/icon_quote.svg" mode="aspectFit"></image>
         </view>
+        <!-- 代码块 -->
+        <view class="tool-item" bindtap="formatText" data-type="codeblock">
+          <image class="tool-icon" src="/image/icon_codeblock.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 分隔符 -->
+        <view class="tool-separator"></view>
+        <!-- 图片 -->
         <view class="tool-item" bindtap="formatText" data-type="link">
-          <text class="tool-icon">🔗</text>
+          <image class="tool-icon" src="/image/icon_document.svg" mode="aspectFit"></image>
         </view>
+        <!-- 链接 -->
         <view class="tool-item" bindtap="formatText" data-type="image">
-          <text class="tool-icon">🖼️</text>
+          <image class="tool-icon" src="/image/icon_link.svg" mode="aspectFit"></image>
         </view>
+        <!-- 表格 -->
         <view class="tool-item" bindtap="formatText" data-type="table">
-          <text class="tool-icon">▦</text>
+          <image class="tool-icon" src="/image/icon_table.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 分隔线 -->
+        <view class="tool-item" bindtap="formatText" data-type="horizontalRule">
+          <image class="tool-icon" src="/image/icon_horizontal_rule.svg" mode="aspectFit"></image>
         </view>
       </view>
     </scroll-view>
@@ -57,7 +96,10 @@
         value="{{content}}" 
         bindinput="onContentChange" 
         bindfocus="onTextareaFocus"
-        bindlinechange="onTextareaSelect"
+        bindlinechange="onTextareaLineChange"
+        bindblur="onTextareaBlur"
+        bindcursor="onTextareaCursor"
+        cursor-spacing="20"
         maxlength="-1"
         placeholder="开始编辑...">
       </textarea>
@@ -110,20 +152,20 @@
       <!-- Spell Check Toggle Button (New) -->
       <view class="action-btn spell-check {{spellErrors.length > 0 ? 'has-errors' : ''}}" 
             bindtap="toggleErrorPanel" wx:if="{{spellCheckEnabled}}">
-        <text class="action-icon">Abc</text>
+        <image class="action-icon" src="/image/icon_search.svg" mode="aspectFit"></image>
         <view class="error-badge" wx:if="{{spellErrors.length > 0}}">{{spellErrors.length}}</view>
       </view>
       <view class="action-btn undo" bindtap="undoEdit">
-        <text class="action-icon">↩️</text>
+        <image class="action-icon" src="/image/icon_undo.svg" mode="aspectFit"></image>
       </view>
       <view class="action-btn redo" bindtap="redoEdit">
-        <text class="action-icon">↪️</text>
+        <image class="action-icon" src="/image/icon_redo.svg" mode="aspectFit"></image>
       </view>
       <view class="action-btn preview" bindtap="switchToPreview">
-        <text class="action-icon">👁️</text>
+        <image class="action-icon" src="{{editMode === 'preview' ? '/image/icon_preview_green.svg' : '/image/icon_preview.svg'}}" mode="aspectFit"></image>
       </view>
       <view class="action-btn more" bindtap="showMoreMenu">
-        <text class="action-icon">⋮</text>
+        <image class="action-icon" src="/image/icon_more.svg" mode="aspectFit"></image>
       </view>
     </view>
   </view>
@@ -135,38 +177,39 @@
   <view class="menu-content" catchtap>
     <view class="menu-title">更多操作</view>
     <view class="menu-item" bindtap="shareDocument">
-      <text class="menu-icon">↗️</text>
+      <image class="menu-icon" src="/image/icon_share.svg" mode="aspectFit"></image>
       <text class="menu-text">分享</text>
     </view>
     <view class="menu-item" bindtap="exportAsMD">
-      <text class="menu-icon">📄</text>
+      <image class="menu-icon" src="/image/icon_markdown.svg" mode="aspectFit"></image>
       <text class="menu-text">导出为 Markdown</text>
     </view>
     <view class="menu-item" bindtap="exportAsHTML">
-      <text class="menu-icon">🌐</text>
+      <image class="menu-icon" src="/image/icon_document.svg" mode="aspectFit"></image>
       <text class="menu-text">导出为 HTML</text>
     </view>
     <view class="menu-item" bindtap="exportAsPDF">
-      <text class="menu-icon">📑</text>
+      <image class="menu-icon" src="/image/icon_pdf.svg" mode="aspectFit"></image>
       <text class="menu-text">导出为 PDF</text>
     </view>
     <view class="menu-item" bindtap="exportAsWord">
-      <text class="menu-icon">📝</text>
+      <image class="menu-icon" src="/image/icon_word.svg" mode="aspectFit"></image>
       <text class="menu-text">导出为 Word</text>
     </view>
     <view class="menu-item" bindtap="modifyTags">
-      <text class="menu-icon">🏷️</text>
+      <image class="menu-icon" src="/image/icon_manage_tags.svg" mode="aspectFit"></image>
       <text class="menu-text">修改标签</text>
     </view>
     <view class="menu-item" bindtap="addTag">
-      <text class="menu-icon">➕</text>
+      <image class="menu-icon" src="/image/icon_manage_tags.svg" mode="aspectFit"></image>
       <text class="menu-text">添加标签</text>
     </view>
     <view class="menu-item" bindtap="viewHistory">
-      <text class="menu-icon">⏳</text>
+      <image class="menu-icon" src="/image/icon_settings.svg" mode="aspectFit"></image>
       <text class="menu-text">查看历史版本 (开发中)</text>
     </view>
     <view class="menu-item cancel" bindtap="hideMoreMenu">
+      <image class="menu-icon" src="/image/icon_delete_red.svg" mode="aspectFit"></image>
       <text>取消</text>
     </view>
   </view>

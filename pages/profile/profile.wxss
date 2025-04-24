@@ -78,7 +78,7 @@ page {
 
 .arrow-icon {
   font-size: 24rpx;
-  color: #999999;
+  color: var(--text-secondary-color, #999999);
 }
 
 /* 隐藏登录按钮样式 */
@@ -136,11 +136,11 @@ page {
 }
 
 .selector-item.selected {
-  color: #3E7FFF;
+  color: var(--primary-color, #3E7FFF);
 }
 
 .selected-icon {
-  color: #3E7FFF;
+  color: var(--primary-color, #3E7FFF);
   font-size: 32rpx;
 }
 
@@ -149,7 +149,7 @@ page {
   padding: 24rpx 0;
   text-align: center;
   font-size: 32rpx;
-  color: #3E7FFF;
+  color: var(--primary-color, #3E7FFF);
   font-weight: 500;
 }
 
@@ -207,6 +207,7 @@ page {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  filter: var(--svg-filter);
 }
 
 .theme-icon {
@@ -251,7 +252,7 @@ page {
 
 .item-text {
   font-size: 28rpx;
-  color: #333333;
+  color: var(--text-color, #333333);
 }
 
 .item-right {
@@ -261,7 +262,7 @@ page {
 
 .item-value, .version {
   font-size: 28rpx;
-  color: #999999;
+  color: var(--text-secondary-color, #999999);
   margin-right: 10rpx;
 }
 

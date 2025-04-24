@@ -1,7 +1,7 @@
 <view class="theme-{{theme}}">
 <view id="page-root" class="{{globalStyleClass}}">
 <!--pages/document/document.wxml-->
-<navigation-bar title="{{pageTitle || '文档'}}" back="{{currentTagId}}" color="black" background="#FFF">
+<navigation-bar title="{{pageTitle || '文档'}}" back="{{currentTagId}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}">
   <view slot="right">
     <!-- 可以添加搜索按钮等 -->
     <!-- <button bindtap="toggleSearch">搜</button> -->
@@ -23,7 +23,7 @@
       <view class="document-item" wx:for="{{documents}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
         <!-- 文档图标 -->
         <view class="document-icon">
-           <image class="doc-icon-image" src="/image/icon_document.png"></image>
+           <image class="doc-icon-image" src="/image/icon_document.svg"></image>
            <!-- 后续可以根据 item.tags[0] 的颜色来动态设置图标颜色或背景 -->
         </view>
         <!-- 文档信息 -->
@@ -50,7 +50,7 @@
       <view class="empty-state">
         <image class="empty-icon" src="/image/empty_document.png" mode="aspectFit"></image>
         <view class="empty-text">{{searchValue ? '未找到相关文档' : (currentTagId ? '此标签下暂无文档' : '暂无文档')}}</view>
-        <view class="empty-subtext" wx:if="{{!searchValue}}">{{currentTagId ? '可以尝试将文档添加到此标签' : '点击底部导航栏的 \"+\" 按钮创建新文档'}}</view>
+        <view class="empty-subtext" wx:if="{{!searchValue}}">{{currentTagId ? '可以尝试将文档添加到此标签' : '点击底部导航栏的 "+" 按钮创建新文档'}}</view>
       </view>
     </block>
   </view>
@@ -62,21 +62,26 @@
   <view class="menu-content">
     <view class="menu-title">{{currentDoc.title || '文档操作'}}</view>
     <view class="menu-item" bindtap="renameDocument">
-      <text class="menu-icon">✎</text>
+      <!-- <text class="menu-icon">✎</text> -->
+      <image class="menu-icon-image" src="/image/icon_rename.svg"></image>
       <text class="menu-text">重命名</text>
     </view>
     <view class="menu-item" bindtap="shareDocument">
-      <text class="menu-icon">↗</text>
+      <!-- <text class="menu-icon">↗</text> -->
+      <image class="menu-icon-image" src="/image/icon_share.svg"></image>
       <text class="menu-text">分享</text>
     </view>
     <view class="menu-item" bindtap="toggleFavorite">
       <!-- 根据 currentDoc.favorite 动态显示图标和文字 -->
-      <text class="menu-icon">{{currentDoc.favorite ? '★' : '☆'}}</text>
+      <!-- <text class="menu-icon">{{currentDoc.favorite ? '★' : '☆'}}</text> -->
+      <image wx:if="{{currentDoc.favorite}}" class="menu-icon-image" src="/image/icon_favorite_selected.svg"></image>
+      <image wx:else class="menu-icon-image" src="/image/icon_favorite_unselected.svg"></image>
       <text class="menu-text">{{currentDoc.favorite ? '取消收藏' : '收藏'}}</text>
     </view>
     <!-- <view class="menu-item" bindtap="moveToFolder">-->
     <view class="menu-item" bindtap="addTag">
-      <text class="menu-icon">🏷</text>
+      <!-- <text class="menu-icon">🏷</text> -->
+      <image class="menu-icon-image" src="/image/icon_manage_tags.svg"></image>
       <text class="menu-text">管理标签</text> <!-- 改为管理标签更合适 -->
     </view>
     <!-- <view class="menu-item" bindtap="archiveDocument">-->
@@ -84,7 +89,8 @@
     <!--   <text class="menu-text">归档</text>-->
     <!-- </view>-->
     <view class="menu-item delete" bindtap="deleteDocument">
-      <text class="menu-icon">🗑</text>
+      <!-- <text class="menu-icon">🗑</text> -->
+      <image class="menu-icon-image" src="/image/icon_delete_red.svg"></image> <!-- 使用固定红色的删除图标 -->
       <text class="menu-text">删除</text>
     </view>
     <view class="menu-cancel" bindtap="hideDocMenu">取消</view>

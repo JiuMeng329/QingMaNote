@@ -100,12 +100,19 @@ page {
   margin-left: 10rpx;
 }
 
-.action-btn.edit .icon {
-  color: var(--primary-color); /* Use variable */
+.icon-image {
+  width: 40rpx;
+  height: 40rpx;
+  filter: var(--svg-filter);
 }
 
-.action-btn.delete .icon {
-  color: #FF4D4F; /* Keep delete color specific */
+.action-btn.edit .icon-image {
+  filter: var(--primary-filter);
+}
+
+.action-btn.delete .icon-image {
+  /* 删除图标保持红色 */
+  filter: invert(29%) sepia(94%) saturate(7466%) hue-rotate(353deg) brightness(103%) contrast(110%);
 }
 
 .icon {
@@ -122,9 +129,10 @@ page {
 }
 
 .empty-icon {
-  font-size: 80rpx;
+  width: 120rpx;
+  height: 120rpx;
   margin-bottom: 30rpx;
-  color: var(--text-secondary-color); /* Use variable */
+  filter: var(--svg-filter);
 }
 
 .empty-text {

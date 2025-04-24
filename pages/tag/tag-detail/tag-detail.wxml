@@ -37,7 +37,7 @@
           <view class="document-item" wx:for="{{documents}}" wx:key="id" bindtap="viewDocument" data-id="{{item.id}}">
             <view class="document-icon">
               <!-- 可以根据文档类型显示不同图标 -->
-              <image class="doc-icon-image" src="/image/icon_document.png"></image>
+              <image class="doc-icon-image" src="/image/icon_document.svg"></image>
             </view>
             <view class="document-info">
               <view class="document-title">{{item.title}}</view>

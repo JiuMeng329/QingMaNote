@@ -1,5 +1,5 @@
 <!--pages/profile/profile.wxml-->
-<navigation-bar title="设置" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="设置" back="{{true}}" color="{{currentTheme === 'light' ? 'black' : (currentTheme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{currentTheme === 'light' ? '#FFF' : (currentTheme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{currentTheme}}"></navigation-bar>
 <view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
 
 <scroll-view class="scrollarea" scroll-y type="list">

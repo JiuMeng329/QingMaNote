@@ -1,18 +1,20 @@
 <view class="theme-{{theme}}">
 <view id="page-root" class="{{globalStyleClass}}">
 <!--index.wxml-->
-<navigation-bar title="MarkMark" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="轻码笔记" back="{{false}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}"></navigation-bar>
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="index-container">
     <!-- 顶部标题和操作区 -->
     <view class="header">
-      <view class="app-title">MarkMark</view>
+      <view class="app-title">轻码笔记</view>
       <view class="header-actions">
         <view class="action-btn search" bindtap="toggleSearch">
-          <view class="search-icon"></view>
+          <!-- <view class="search-icon"></view> -->
+          <image class="search-icon-image" src="/image/icon_search.svg"></image>
         </view>
         <view class="action-btn settings" bindtap="onSettings">
-          <view class="settings-icon"></view>
+          <!-- <view class="settings-icon"></view> -->
+          <image class="settings-icon-image" src="/image/icon_settings.svg"></image>
         </view>
       </view>
     </view>
@@ -41,7 +43,8 @@
             </view>
           </view>
           <view class="document-icon">
-            <view class="doc-icon"></view>
+            <!-- <view class="doc-icon"></view> -->
+            <image class="doc-icon-image" src="/image/icon_document.svg"></image>
           </view>
         </view>
       </view>

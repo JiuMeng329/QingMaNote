@@ -64,16 +64,17 @@ page {
 
 .document-icon {
   margin-right: 24rpx;
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 50%;
-  /* Icon itself might not be themeable */
+  width: 48rpx;
+  height: 48rpx;
+  /* 调整尺寸以适应SVG图标 */
 }
 
 .doc-icon-image {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 50%;
+  width: 48rpx;
+  height: 48rpx;
+  /* 移除border-radius，因为文档图标不应该是圆形的 */
+  /* 为SVG添加颜色控制 */
+  filter: var(--svg-filter);
 }
 
 .document-info {
@@ -194,12 +195,25 @@ page {
   border-bottom: 1rpx solid var(--border-color);
 }
 
+/* 调整旧的 menu-icon 样式，主要用于占位和对齐 */
 .menu-icon {
-  font-size: 36rpx;
+  /* font-size: 36rpx; */ /* 由 image 大小决定 */
   margin-right: 24rpx;
-  width: 48rpx;
-  text-align: center;
-  color: var(--text-secondary-color);
+  width: 48rpx; /* 保持容器宽度 */
+  height: 36rpx; /* 设置容器高度以匹配图标 */
+  display: flex; /* 使用flex布局 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  /* color: var(--text-secondary-color); */ /* 颜色由 SVG filter 控制 */
+  /* text-align: center; */ /* flex 布局已处理对齐 */
+}
+
+/* 新增 menu-icon-image 样式 */
+.menu-icon-image {
+  width: 36rpx; /* 设置图标实际大小 */
+  height: 36rpx;
+  filter: var(--svg-filter); /* 应用主题颜色 */
+  margin-right: 24rpx; /* 与旧的menu-icon保持一致的外边距 */
 }
 
 .menu-text {
@@ -211,8 +225,14 @@ page {
   color: #FF4D4F;
 }
 
+/* 移除 delete 状态下 menu-icon 的颜色设置，因为红色已在 SVG 中指定 */
 .menu-item.delete .menu-icon {
-  color: #FF4D4F;
+  /* color: #FF4D4F; */
+}
+
+/* 对删除图标的 image 不应用 filter */
+.menu-item.delete .menu-icon-image {
+  filter: none; /* 移除通用过滤器，因为颜色已固定 */
 }
 
 .menu-cancel {

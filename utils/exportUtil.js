@@ -433,7 +433,8 @@ async function renderMultiplePages(canvas, content, title, filename, pageCount, 
     const pageFilePaths = [];
     
     // 设置Canvas尺寸
-    const dpr = wx.getSystemInfoSync().pixelRatio || 2;
+    const deviceInfo = wx.getDeviceInfo();
+    const dpr = deviceInfo.pixelRatio || 2;
     canvas.width = pageWidth * dpr;
     canvas.height = pageHeight * dpr;
     
@@ -681,13 +682,17 @@ async function renderSinglePage(ctx, content, title, width, height, pageNumber, 
 function exportCanvasToImage(canvas, filename) {
   return new Promise((resolve, reject) => {
     try {
+      // 获取设备信息
+      const deviceInfo = wx.getDeviceInfo();
+      const dpr = deviceInfo.pixelRatio || 2;
+      
       // 导出图片
       wx.canvasToTempFilePath({
         canvas: canvas,
         x: 0,
         y: 0,
-        width: canvas.width / (wx.getSystemInfoSync().pixelRatio || 2),
-        height: canvas.height / (wx.getSystemInfoSync().pixelRatio || 2),
+        width: canvas.width / dpr,
+        height: canvas.height / dpr,
         destWidth: canvas.width,
         destHeight: canvas.height,
         fileType: 'png',
@@ -881,6 +886,9 @@ function saveImagesToLocalStorage(filePaths, filename, resolve, reject) {
     return reject(new Error('没有有效的图片文件'));
   }
   
+  // 记录保存失败的图片索引
+  const failedPageIndices = [];
+  
   // 创建一个包含所有页面信息的字符串
   const firstFilePath = filePaths[0];
   let pageInfoMessage = `共 ${filePaths.length} 页，`;
@@ -903,7 +911,7 @@ function saveImagesToLocalStorage(filePaths, filename, resolve, reject) {
           .then(() => {
             if (filePaths.length > 1) {
               // 如果有多页，询问是否继续保存下一页
-              showSaveNextPageOption(filePaths, 1, baseFileName, resolve);
+              showSaveNextPageOption(filePaths, 1, baseFileName, resolve, failedPageIndices);
             } else {
               resolve(firstFilePath);
             }
@@ -914,7 +922,14 @@ function saveImagesToLocalStorage(filePaths, filename, resolve, reject) {
               title: '保存失败',
               icon: 'none'
             });
-            resolve(firstFilePath); // 仍然视为成功完成导出
+            // 记录失败的页面
+            failedPageIndices.push(0);
+            if (filePaths.length > 1) {
+              showSaveNextPageOption(filePaths, 1, baseFileName, resolve, failedPageIndices);
+            } else {
+              // 只有一页且失败，提供重试选项
+              offerRetryOption(filePaths, failedPageIndices, baseFileName, resolve, reject);
+            }
           });
       } else {
         resolve(firstFilePath);
@@ -926,9 +941,14 @@ function saveImagesToLocalStorage(filePaths, filename, resolve, reject) {
 /**
  * 显示保存下一页选项
  */
-function showSaveNextPageOption(filePaths, currentIndex, baseFileName, resolve) {
+function showSaveNextPageOption(filePaths, currentIndex, baseFileName, resolve, failedPageIndices) {
   if (currentIndex >= filePaths.length - 1) {
-    // 已经是最后一页
+    // 已经是最后一页，检查是否有失败的页面需要重试
+    if (failedPageIndices && failedPageIndices.length > 0) {
+      offerRetryOption(filePaths, failedPageIndices, baseFileName, resolve);
+      return;
+    }
+    
     wx.showToast({
       title: '所有页面已处理',
       icon: 'success'
@@ -949,7 +969,7 @@ function showSaveNextPageOption(filePaths, currentIndex, baseFileName, resolve) 
         saveToLocalStorage(filePaths[nextIndex], `${baseFileName}_page${nextIndex + 1}.png`)
           .then(() => {
             // 继续询问下一页
-            showSaveNextPageOption(filePaths, nextIndex, baseFileName, resolve);
+            showSaveNextPageOption(filePaths, nextIndex, baseFileName, resolve, failedPageIndices);
           })
           .catch(error => {
             console.error(`保存第${nextIndex + 1}页失败:`, error);
@@ -957,11 +977,19 @@ function showSaveNextPageOption(filePaths, currentIndex, baseFileName, resolve) 
               title: `保存第${nextIndex + 1}页失败`,
               icon: 'none'
             });
+            // 记录失败的页面
+            failedPageIndices.push(nextIndex);
             // 继续询问下一页
-            showSaveNextPageOption(filePaths, nextIndex, baseFileName, resolve);
+            showSaveNextPageOption(filePaths, nextIndex, baseFileName, resolve, failedPageIndices);
           });
       } else {
-        // 用户选择完成
+        // 用户选择完成，检查是否有失败的页面需要重试
+        if (failedPageIndices && failedPageIndices.length > 0) {
+          offerRetryOption(filePaths, failedPageIndices, baseFileName, resolve);
+          return;
+        }
+        
+        // 没有失败的页面，显示完成信息
         wx.showToast({
           title: '保存完成',
           icon: 'success'
@@ -970,6 +998,92 @@ function showSaveNextPageOption(filePaths, currentIndex, baseFileName, resolve) 
       }
     }
   });
+}
+
+/**
+ * 提供重试选项，重新尝试保存失败的页面
+ */
+function offerRetryOption(filePaths, failedPageIndices, baseFileName, resolve) {
+  wx.showModal({
+    title: '部分页面保存失败',
+    content: `有 ${failedPageIndices.length} 页保存失败，是否重试？`,
+    confirmText: '重试',
+    cancelText: '放弃',
+    success: (res) => {
+      if (res.confirm) {
+        // 重试失败的页面
+        retryFailedPages(filePaths, failedPageIndices, baseFileName, resolve);
+      } else {
+        // 用户选择放弃
+        wx.showToast({
+          title: '已完成保存',
+          icon: 'none'
+        });
+        resolve(filePaths[0]);
+      }
+    }
+  });
+}
+
+/**
+ * 重试保存失败的页面
+ */
+function retryFailedPages(filePaths, failedPageIndices, baseFileName, resolve) {
+  if (failedPageIndices.length === 0) {
+    wx.showToast({
+      title: '所有页面已保存',
+      icon: 'success'
+    });
+    resolve(filePaths[0]);
+    return;
+  }
+  
+  // 复制一份失败索引数组，避免修改原始数组
+  const remainingFailures = [...failedPageIndices];
+  const currentIndex = remainingFailures.shift();
+  const pageNumber = currentIndex + 1;
+  
+  wx.showLoading({
+    title: `重试第${pageNumber}页...`,
+    mask: true
+  });
+  
+  // 重新尝试保存
+  saveToLocalStorage(filePaths[currentIndex], `${baseFileName}_page${pageNumber}.png`)
+    .then(() => {
+      wx.hideLoading();
+      wx.showToast({
+        title: `第${pageNumber}页重试成功`,
+        icon: 'success',
+        duration: 1000
+      });
+      
+      // 添加延迟，让用户看到成功信息
+      setTimeout(() => {
+        retryFailedPages(filePaths, remainingFailures, baseFileName, resolve);
+      }, 1000);
+    })
+    .catch(error => {
+      wx.hideLoading();
+      console.error(`重试保存第${pageNumber}页失败:`, error);
+      
+      wx.showModal({
+        title: '重试失败',
+        content: `第${pageNumber}页仍然无法保存，是否跳过此页？`,
+        confirmText: '跳过',
+        cancelText: '再试一次',
+        success: (res) => {
+          if (res.confirm) {
+            // 用户选择跳过，继续处理其他失败页面
+            retryFailedPages(filePaths, remainingFailures, baseFileName, resolve);
+          } else {
+            // 用户选择再试一次，将当前索引重新加入队列
+            remainingFailures.unshift(currentIndex);
+            retryFailedPages(filePaths, remainingFailures, baseFileName, resolve);
+          }
+        }
+      });
+    });
 }
 
 /**

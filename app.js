@@ -59,7 +59,9 @@ App({
     }
     // 如果是 system 模式，获取系统当前主题
     try {
-      return wx.getSystemInfoSync().theme || 'light';
+      // 使用新的API替换已废弃的wx.getSystemInfoSync()
+      const appBaseInfo = wx.getAppBaseInfo();
+      return appBaseInfo.theme || 'light';
     } catch (e) {
       console.error('获取系统主题失败', e);
       return 'light'; // Fallback to light

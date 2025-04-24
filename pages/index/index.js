@@ -155,8 +155,17 @@ Page({
   
   // 设置
   onSettings: function() {
-    wx.navigateTo({
-      url: '/pages/profile/profile'
+    console.log('点击了设置按钮');
+    wx.switchTab({
+      url: '/pages/profile/profile',
+      fail: function(err) {
+        console.error('跳转到设置页面失败:', err);
+        // 提示用户
+        wx.showToast({
+          title: '设置页面跳转失败',
+          icon: 'none'
+        });
+      }
     });
   },
 

@@ -1,5 +1,5 @@
 /**app.wxss**/
-@import "theme.wxss";
+
 
 page {
   /* 默认使用浅色主题 */
@@ -10,6 +10,8 @@ page {
   --border-color: #EEEEEE;
   --primary-color: #3E7FFF;
   --shadow-color: rgba(0, 0, 0, 0.05);
+  --svg-filter: brightness(0) saturate(100%); /* 浅色主题下的SVG过滤器：使用黑色 */
+  --primary-filter: invert(40%) sepia(57%) saturate(2259%) hue-rotate(210deg) brightness(96%) contrast(101%); /* 主色调滤镜 */
   
   /* 默认使用系统字体 */
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -36,4 +38,29 @@ page {
   justify-content: space-between;
   padding: 200rpx 0;
   box-sizing: border-box;
+}
+
+/* 添加深色主题变量 */
+.theme-dark {
+  --bg-color: #121212;
+  --card-bg-color: #1E1E1E;
+  --text-color: #FFFFFF;
+  --text-secondary-color: #AAAAAA;
+  --border-color: #333333;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --svg-filter: brightness(0) saturate(100%) invert(1); /* 深色主题下的SVG过滤器：使用白色 */
+  --primary-filter: invert(48%) sepia(38%) saturate(2255%) hue-rotate(202deg) brightness(100%) contrast(101%); /* 深色主题主色调滤镜 */
+}
+
+/* 添加GitHub风格主题变量 */
+.theme-github {
+  --bg-color: #0d1117;
+  --card-bg-color: #161b22;
+  --text-color: #c9d1d9;
+  --text-secondary-color: #8b949e;
+  --border-color: #30363d;
+  --primary-color: #58a6ff;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --svg-filter: brightness(0) saturate(100%) invert(0.8); /* GitHub主题下的SVG过滤器：使用浅灰色 */
+  --primary-filter: invert(68%) sepia(19%) saturate(6401%) hue-rotate(189deg) brightness(101%) contrast(101%); /* GitHub主题主色调滤镜 */
 }

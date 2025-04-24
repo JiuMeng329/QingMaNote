@@ -79,6 +79,7 @@ page {
   min-width: 100%;
   height: 70rpx;
   box-sizing: border-box;
+  align-items: center;
 }
 
 .tool-item {
@@ -89,6 +90,7 @@ page {
   justify-content: center;
   margin: 0 8rpx;
   border-radius: 8rpx;
+  position: relative;
 }
 
 .tool-item:active {
@@ -99,6 +101,34 @@ page {
   font-size: 32rpx;
   color: var(--text-color);
   font-weight: 500;
+  width: 40rpx;
+  height: 40rpx;
+  filter: var(--svg-filter);
+}
+
+/* 新增：工具栏分隔符 */
+.tool-separator {
+  width: 1rpx;
+  height: 50rpx;
+  background-color: var(--border-color);
+  margin: 0 12rpx;
+}
+
+/* 新增：文本图标样式 */
+.text-icon {
+  font-size: 28rpx;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* 新增：三级标题的数字标记 */
+.sub-level {
+  position: absolute;
+  font-size: 18rpx;
+  color: var(--text-color);
+  font-weight: 500;
+  right: 10rpx;
+  top: 10rpx;
 }
 
 /* 编辑区域 */
@@ -331,6 +361,9 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36rpx;
+  height: 36rpx;
+  filter: var(--svg-filter);
 }
 
 /* 更多菜单 */
@@ -395,7 +428,9 @@ page {
   font-size: 36rpx;
   margin-right: 24rpx;
   width: 48rpx;
+  height: 48rpx;
   text-align: center;
+  filter: var(--svg-filter);
 }
 
 .menu-text {
@@ -513,4 +548,80 @@ page {
   min-width: 30rpx;
   text-align: center;
   line-height: 1;
+}
+
+/* 避免对特定颜色的图标应用主题过滤器 */
+.menu-item.cancel .menu-icon {
+  filter: none; /* 保留原始颜色 */
+}
+
+/* 预览按钮在不同状态下的颜色处理 */
+.action-btn.preview .action-icon {
+  filter: none; /* 保留原始颜色 */
+}
+
+/* Markdown 内容样式增强 */
+.markdown-content code.inline-code {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  padding: 2rpx 8rpx;
+  margin: 0 4rpx;
+  background-color: var(--code-bg-color, rgba(0, 0, 0, 0.05));
+  color: var(--code-text-color, #333);
+  border-radius: 4rpx;
+  font-size: 26rpx;
+}
+
+.markdown-content pre.code-block {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  background-color: var(--code-bg-color, rgba(0, 0, 0, 0.05));
+  padding: 16rpx 20rpx;
+  border-radius: 8rpx;
+  margin: 20rpx 0;
+  overflow-x: auto;
+  position: relative;
+  border-left: 4rpx solid var(--primary-color, #3E7FFF);
+}
+
+.markdown-content pre.code-block code {
+  display: block;
+  color: var(--code-text-color, #333);
+  font-size: 26rpx;
+  line-height: 1.5;
+  white-space: pre;
+  font-family: inherit;
+  background: none;
+  padding: 0;
+}
+
+/* 任务列表样式 */
+.markdown-content ul.task-list {
+  list-style-type: none;
+  padding-left: 24rpx;
+}
+
+.markdown-content li.task-list-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8rpx;
+}
+
+.markdown-content li.task-list-item input[type="checkbox"] {
+  margin-right: 12rpx;
+  margin-top: 6rpx;
+}
+
+/* 支持主题的代码块样式变量 */
+:root {
+  --code-bg-color: rgba(0, 0, 0, 0.05);
+  --code-text-color: #333333;
+}
+
+.theme-dark {
+  --code-bg-color: rgba(255, 255, 255, 0.1);
+  --code-text-color: #e6e6e6;
+}
+
+.theme-github {
+  --code-bg-color: #1c2128;
+  --code-text-color: #adbac7;
 }

@@ -32,11 +32,18 @@ const markdownToHtml = function(markdown) {
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
     
     // 处理代码块
-    .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')
-    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/```(\w*)\n([\s\S]+?)```/g, function(match, language, code) {
+      return `<pre class="code-block ${language ? `language-${language}` : ''}"><code>${code}</code></pre>`;
+    })
+    .replace(/`(.+?)`/g, '<code class="inline-code">$1</code>')
     
     // 处理水平线
     .replace(/^---+$/gm, '<hr>')
+    
+    // 处理任务列表
+    .replace(/^- \[([ x])\] (.+)$/gm, function(match, checked, content) {
+      return `<li class="task-list-item"><input type="checkbox" ${checked === 'x' ? 'checked' : ''} disabled>${content}</li>`;
+    })
     
     // 处理无序列表
     .replace(/^- (.+)$/gm, '<li>$1</li>')
@@ -74,9 +81,20 @@ const markdownToHtml = function(markdown) {
     }
     return match;
   });
+
+  // 处理任务列表
+  html = html.replace(/<li class="task-list-item">(.+?)<\/li>/g, function(match) {
+    if (html.indexOf('<ul class="task-list">') === -1) {
+      return `<ul class="task-list">${match}</ul>`;
+    }
+    return match;
+  });
   
   // 将连续的<li>元素包装在<ul>或<ol>中
   html = html.replace(/(<li>.+?<\/li>)\s*(<li>.+?<\/li>)/g, '$1$2');
+  
+  // 将连续的任务列表项包装起来
+  html = html.replace(/(<li class="task-list-item">.+?<\/li>)\s*(<li class="task-list-item">.+?<\/li>)/g, '$1$2');
   
   // 处理换行
   html = html.replace(/\n\n/g, '<br>');
@@ -102,6 +120,7 @@ const getPlainText = function(markdown) {
     .replace(/~~([^~]*)~~/g, '$1') // 删除线
     .replace(/^\s*[\-*]\s+/gm, '') // 无序列表
     .replace(/^\s*\d+\.\s+/gm, '') // 有序列表
+    .replace(/^\s*- \[([ x])\]\s+/gm, '') // 任务列表
     .replace(/^\s*>/gm, '') // 引用
     .replace(/\|([^\|]*)\|/g, '$1') // 表格
     .replace(/^---+$/gm, '') // 水平线

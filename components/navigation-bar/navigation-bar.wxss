@@ -12,6 +12,22 @@
   --height: 48px;
 }
 
+/* 主题相关样式 */
+.weui-navigation-bar.theme-dark {
+  --weui-FG-0: rgba(255,255,255,.9);
+}
+
+.weui-navigation-bar.theme-github {
+  --weui-FG-0: rgba(201,209,217,.9);
+}
+
+.weui-navigation-bar.theme-dark .weui-navigation-bar__btn_goback,
+.weui-navigation-bar.theme-github .weui-navigation-bar__btn_goback {
+  background-color: var(--weui-FG-0);
+  /* 替换返回按钮背景图为白色版本 */
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24' viewBox='0 0 12 24'%3E  %3Cpath fill='%23ffffff' fill-opacity='.9' fill-rule='evenodd' d='M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5 10 4.563 2.682 12 10 19.438z'/%3E%3C/svg%3E");
+}
+
 .weui-navigation-bar {
   /* 使用visible替代auto，避免overflow-x不支持的问题 */
   overflow: visible;
