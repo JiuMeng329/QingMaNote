@@ -5,6 +5,9 @@
  * 提供Markdown到HTML的转换功能
  */
 
+// 导入highlight.js模块
+const hljs = require('./highlight');
+
 /**
  * 将Markdown文本转换为HTML
  * @param {String} markdown Markdown文本
@@ -12,6 +15,22 @@
  */
 const markdownToHtml = function(markdown) {
   if (!markdown) return '';
+  
+  // 首先处理代码块，避免内部内容被其他规则影响
+  let codeBlocks = [];
+  let codeBlockCount = 0;
+  
+  // 提取代码块并替换为占位符
+  markdown = markdown.replace(/```(\w*)\n([\s\S]+?)```/g, function(match, language, code) {
+    const placeholder = `__CODE_BLOCK_${codeBlockCount}__`;
+    codeBlocks.push({
+      placeholder: placeholder,
+      language: language,
+      code: code
+    });
+    codeBlockCount++;
+    return placeholder;
+  });
   
   let html = markdown
     // 处理标题
@@ -31,11 +50,11 @@ const markdownToHtml = function(markdown) {
     .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1">')
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
     
-    // 处理代码块
-    .replace(/```(\w*)\n([\s\S]+?)```/g, function(match, language, code) {
-      return `<pre class="code-block ${language ? `language-${language}` : ''}"><code>${code}</code></pre>`;
+    // 处理行内代码，转义HTML特殊字符
+    .replace(/`([^`]+?)`/g, function(match, code) {
+      const escapedCode = hljs.escapeHtml(code);
+      return `<code class="inline-code">${escapedCode}</code>`;
     })
-    .replace(/`(.+?)`/g, '<code class="inline-code">$1</code>')
     
     // 处理水平线
     .replace(/^---+$/gm, '<hr>')
@@ -99,6 +118,32 @@ const markdownToHtml = function(markdown) {
   // 处理换行
   html = html.replace(/\n\n/g, '<br>');
   
+  // 恢复代码块，使用highlight.js进行高亮
+  codeBlocks.forEach(block => {
+    // 使用highlight.js高亮代码
+    let highlightedCode;
+    
+    if (block.language && block.language.trim()) {
+      // 如果指定了语言，使用对应的高亮
+      const result = hljs.highlight(block.code.trim(), { language: block.language.trim() });
+      highlightedCode = result.value;
+    } else {
+      // 否则尝试自动检测语言
+      const result = hljs.highlightAuto(block.code.trim());
+      highlightedCode = result.value;
+    }
+    
+    // 为代码块添加标记
+    const languageClass = block.language ? ` language-${block.language}` : '';
+    const languageLabel = block.language ? `<div class="code-language-label">${block.language}</div>` : '';
+    
+    // 创建代码块HTML
+    const codeBlockHtml = `<pre class="code-block hljs${languageClass}">${languageLabel}<code>${highlightedCode}</code></pre>`;
+    
+    // 替换占位符
+    html = html.replace(block.placeholder, codeBlockHtml);
+  });
+  
   return html;
 };
 
@@ -158,9 +203,16 @@ const autoComplete = function(text, type) {
   }
 };
 
+// 获取支持的语言列表
+const getSupportedLanguages = function() {
+  // 返回支持的语言数组
+  return Object.keys(require('./highlight').languages || {});
+};
+
 module.exports = {
   markdownToHtml,
   getPlainText,
   countWords,
-  autoComplete
+  autoComplete,
+  getSupportedLanguages
 };

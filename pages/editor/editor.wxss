@@ -47,10 +47,10 @@ page {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   position: relative;
   height: calc(100vh - 90rpx); /* 减去导航栏高度 */
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* 工具栏 */
@@ -131,22 +131,20 @@ page {
   top: 10rpx;
 }
 
-/* 编辑区域 */
-.editor-content {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  background-color: var(--card-bg-color);
-  height: calc(100% - 166rpx); /* 减去工具栏和状态栏的高度 */
-}
-
 /* 预览区域样式 */
 .preview-area {
   flex: 1;
   background-color: var(--card-bg-color);
   padding: 20rpx;
-  overflow-y: auto;
+  overflow: auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.preview-container {
+  min-width: 100%;
+  width: fit-content;
+  padding-bottom: 100rpx;
 }
 
 .preview-area.split-screen {
@@ -158,13 +156,87 @@ page {
   flex: 1;
   background-color: var(--card-bg-color);
   padding: 40rpx;
-  overflow-y: auto;
+  overflow: auto;
+  width: 100%;
 }
 
 .markdown-content {
   font-size: 28rpx;
   line-height: 1.8;
   color: var(--text-color);
+  word-wrap: break-word;
+  word-break: normal;
+  white-space: normal;
+  width: 100%;
+}
+
+/* 确保内容不会横向溢出，但允许表格和代码块等横向滚动 */
+.markdown-content pre,
+.markdown-content table {
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+  white-space: pre;
+  width: fit-content;
+  min-width: 100%;
+  margin: 20rpx 0;
+}
+
+/* 代码块重新设计 - Typora风格 */
+.markdown-content pre.code-block {
+  position: relative;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  background-color: var(--code-bg-color, #f8f8f8);
+  margin: 24rpx 0;
+  border-radius: 6rpx;
+  padding: 40rpx 20rpx 20rpx 20rpx;
+  overflow-x: auto;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid var(--border-color, #e0e0e0);
+  border-left: 4rpx solid var(--primary-color, #3E7FFF);
+}
+
+/* 代码语言标签 */
+.markdown-content .code-language-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--primary-color, #3E7FFF);
+  color: white;
+  font-size: 20rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 0 6rpx 0 6rpx;
+  opacity: 0.9;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-transform: uppercase;
+  z-index: 10;
+  font-weight: bold;
+}
+
+.markdown-content pre.code-block code {
+  display: block;
+  color: var(--code-text-color, #333);
+  font-size: 26rpx;
+  line-height: 1.6;
+  white-space: pre;
+  background: transparent;
+  padding: 0;
+  overflow-x: visible;
+  width: max-content;
+}
+
+/* 行内代码 */
+.markdown-content code.inline-code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  padding: 2rpx 8rpx;
+  margin: 0 4rpx;
+  background-color: var(--code-bg-color, #f8f8f8);
+  color: var(--code-text-color, #333);
+  border-radius: 4rpx;
+  font-size: 26rpx;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border: 1rpx solid #e8e8e8;
 }
 
 .markdown-content h1, .markdown-content h2, .markdown-content h3,
@@ -223,15 +295,7 @@ page {
   background-color: var(--code-bg-color, #f5f5f5);
   padding: 4rpx 8rpx;
   border-radius: 4rpx;
-  font-family: monospace;
-  color: var(--code-text-color, #333);
-}
-
-.markdown-content pre {
-  background-color: var(--code-bg-color, #f5f5f5);
-  padding: 20rpx;
-  border-radius: 8rpx;
-  overflow-x: auto;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
   color: var(--code-text-color, #333);
 }
 
@@ -270,19 +334,32 @@ page {
   padding: 0;
 }
 
+.editor-content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--card-bg-color);
+  height: calc(100% - 166rpx); /* 减去工具栏和状态栏的高度 */
+  overflow: hidden;
+}
+
 .editor-area {
   flex: 1;
   width: 100%;
   height: 100%;
   overflow-y: auto;
   background-color: var(--card-bg-color);
+  padding-bottom: 100rpx; /* 增加底部内边距，确保内容不被状态栏遮挡 */
+  box-sizing: border-box;
 }
 
 .editor-area.split-left {
   width: 50%;
   border-right: 1rpx solid var(--border-color);
   padding: 24rpx;
+  padding-bottom: 100rpx; /* Split模式也需要 */
   background-color: var(--card-bg-color);
+  box-sizing: border-box;
 }
 
 .preview-area.split-right {
@@ -294,10 +371,12 @@ page {
 .markdown-textarea {
   width: 100%;
   height: 100%;
-  font-size: var(--font-size-content);
+  font-size: var(--font-size-content, 28rpx);
   line-height: 1.6;
   color: var(--text-color);
   background-color: transparent;
+  padding-bottom: 20rpx; /* 文本域本身也加一点内边距，提高体验 */
+  box-sizing: border-box;
 }
 
 /* 底部状态栏 */
@@ -560,37 +639,20 @@ page {
   filter: none; /* 保留原始颜色 */
 }
 
-/* Markdown 内容样式增强 */
-.markdown-content code.inline-code {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  padding: 2rpx 8rpx;
-  margin: 0 4rpx;
-  background-color: var(--code-bg-color, rgba(0, 0, 0, 0.05));
-  color: var(--code-text-color, #333);
-  border-radius: 4rpx;
-  font-size: 26rpx;
+/* 支持主题的代码块样式变量 */
+:root {
+  --code-bg-color: #f8f8f8;
+  --code-text-color: #333333;
 }
 
-.markdown-content pre.code-block {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  background-color: var(--code-bg-color, rgba(0, 0, 0, 0.05));
-  padding: 16rpx 20rpx;
-  border-radius: 8rpx;
-  margin: 20rpx 0;
-  overflow-x: auto;
-  position: relative;
-  border-left: 4rpx solid var(--primary-color, #3E7FFF);
+.theme-dark {
+  --code-bg-color: #2d2d2d;
+  --code-text-color: #e6e6e6;
 }
 
-.markdown-content pre.code-block code {
-  display: block;
-  color: var(--code-text-color, #333);
-  font-size: 26rpx;
-  line-height: 1.5;
-  white-space: pre;
-  font-family: inherit;
-  background: none;
-  padding: 0;
+.theme-github {
+  --code-bg-color: #1c2128;
+  --code-text-color: #adbac7;
 }
 
 /* 任务列表样式 */
@@ -608,20 +670,4 @@ page {
 .markdown-content li.task-list-item input[type="checkbox"] {
   margin-right: 12rpx;
   margin-top: 6rpx;
-}
-
-/* 支持主题的代码块样式变量 */
-:root {
-  --code-bg-color: rgba(0, 0, 0, 0.05);
-  --code-text-color: #333333;
-}
-
-.theme-dark {
-  --code-bg-color: rgba(255, 255, 255, 0.1);
-  --code-text-color: #e6e6e6;
-}
-
-.theme-github {
-  --code-bg-color: #1c2128;
-  --code-text-color: #adbac7;
 }

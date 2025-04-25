@@ -57,7 +57,7 @@ Page({
       {name: '大', value: 'large'}
     ],
     // 版本信息
-    version: 'v1.0.0',
+    version: 'v1.0.5',
     // 是否显示选择器
     showThemeSelector: false,
     showFontSelector: false,

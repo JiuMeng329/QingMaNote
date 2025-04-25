@@ -1,11 +1,11 @@
 // pages/help/version/version.js
 Page({
   data: {
-    currentVersion: 'v1.0.0',
+    currentVersion: 'v1.0.5',
     versionHistory: [
       {
         version: 'v1.0.0',
-        date: '2025--',
+        date: '2025-04-20',
         changes: [
           '首次发布',
           '支持Markdown文档的创建和编辑',
@@ -16,12 +16,38 @@ Page({
       },
       {
         version: 'v1.0.1',
-        date: '2025--',
+        date: '2025-04-22',
         changes: [
           '新增导入功能，支持从聊天记录和本地文件导入',
           '新增拼写检查功能',
           '优化编辑器性能',
           '修复多个已知问题'
+        ]
+      },
+      {
+        version: 'v1.0.3',
+        date: '2025-04-23',
+        changes: [
+          '新增导出功能，支持导出为Markdown,HTML,PDF,图片格式',
+          '新增文档分享功能',
+          '优化导出功能'
+        ] 
+      },
+      {
+        version: 'v1.0.4',
+        date: '2025-04-24',
+        changes: [
+          '优化编辑器工具栏功能',
+          '更新图标展示',
+          '修复已知问题'
+        ]
+      },
+      {
+        version: 'v1.0.5',
+        date: '2025-04-25',
+        changes: [
+          '优化代码高亮功能',
+          '修复已知问题'
         ]
       }
     ],

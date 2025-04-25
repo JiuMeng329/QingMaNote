@@ -55,12 +55,12 @@
         <!-- 分隔符 -->
         <view class="tool-separator"></view>
         <!-- 行内代码 -->
-        <view class="tool-item" bindtap="formatText" data-type="quote">
-          <image class="tool-icon" src="/image/icon_code.svg" mode="aspectFit"></image>
-        </view>
-        <!-- 引用 -->
         <view class="tool-item" bindtap="formatText" data-type="code">
           <image class="tool-icon" src="/image/icon_quote.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 引用 -->
+        <view class="tool-item" bindtap="formatText" data-type="quote">
+          <image class="tool-icon" src="/image/icon_code.svg" mode="aspectFit"></image>
         </view>
         <!-- 代码块 -->
         <view class="tool-item" bindtap="formatText" data-type="codeblock">
@@ -68,11 +68,11 @@
         </view>
         <!-- 分隔符 -->
         <view class="tool-separator"></view>
-        <!-- 图片 -->
+        <!-- 链接 -->
         <view class="tool-item" bindtap="formatText" data-type="link">
           <image class="tool-icon" src="/image/icon_document.svg" mode="aspectFit"></image>
         </view>
-        <!-- 链接 -->
+        <!-- 图片 -->
         <view class="tool-item" bindtap="formatText" data-type="image">
           <image class="tool-icon" src="/image/icon_link.svg" mode="aspectFit"></image>
         </view>
@@ -109,8 +109,13 @@
     <scroll-view 
       wx:if="{{editMode === 'split'}}" 
       class="preview-area split-right" 
-      scroll-y="true">
+      enhanced="true"
+      show-scrollbar="true"
+      scroll-y="true"
+      scroll-x="true">
+      <view class="preview-container">
       <rich-text nodes="{{renderedContent}}" class="markdown-content"></rich-text>
+      </view>
     </scroll-view>
   </view>
   
@@ -118,8 +123,14 @@
   <scroll-view 
     wx:if="{{editMode === 'preview'}}" 
     class="preview-area full-screen" 
-    scroll-y="true">
+    scroll-y="true"
+    scroll-x="true"
+    enhanced="true"
+    show-scrollbar="true"
+    bounces="true">
+    <view class="preview-container">
     <rich-text nodes="{{renderedContent}}" class="markdown-content"></rich-text>
+    </view>
   </scroll-view>
   
   <!-- Spell Check Error Panel (New) -->

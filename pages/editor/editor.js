@@ -6,6 +6,29 @@ const markdownUtils = require('../../utils/markdown');
 const editorUtils = require('../../utils/editor');
 const { createSpellChecker } = require('../../utils/spellCheck'); // Import spell checker
 const { exportMarkdown, exportHTML, exportPDF } = require('../../utils/exportUtil'); // Import export utilities
+// const codeHighlight = require('../../utils/codeHighlight'); // 注释掉原代码高亮工具
+const hljs = require('../../utils/highlight'); // 引入新的代码高亮工具
+
+// 兼容层 - 防止其他代码依赖codeHighlight
+const codeHighlight = {
+  highlightAllCodeBlocks: function(html, theme) {
+    // 这是一个空函数，实际的高亮由markdown.js中的hljs处理
+    console.log("已使用highlight.js替代原生高亮");
+    return html;
+  },
+  getThemeColors: function() {
+    // 返回当前主题的颜色
+    return hljs.getCurrentThemeStyles();
+  },
+  setTheme: function(theme) {
+    // 设置highlight.js的主题
+    hljs.setTheme(theme);
+  },
+  getSupportedLanguages: function() {
+    // 返回支持的语言列表
+    return markdownUtils.getSupportedLanguages();
+  }
+};
 
 // 获取应用实例
 const app = getApp();
@@ -418,8 +441,62 @@ Page({
       this.setData({ renderedContent: '' });
       return;
     }
-    const html = markdownUtils.markdownToHtml(this.data.content);
-    this.setData({ renderedContent: html });
+    
+    try {
+      console.log("开始渲染Markdown内容");
+      
+      // 将当前主题同步给highlight.js
+      hljs.setTheme(this.data.theme);
+      
+      // 使用markdownUtils转换内容
+      let html = markdownUtils.markdownToHtml(this.data.content);
+      console.log("Markdown已转换为HTML，代码高亮已应用");
+      
+      // 获取主题对应的颜色
+      const themeColors = hljs.getCurrentThemeStyles();
+      console.log("获取到主题颜色:", JSON.stringify(themeColors).substring(0, 100) + "...");
+      
+      // 为代码块添加内联样式，确保在rich-text中正确显示，支持主题
+      html = html.replace(/<pre class="code-block hljs(.*?)">/g, 
+        `<pre style="position:relative;font-family:'Source Code Pro',Consolas,Monaco,'Courier New',monospace;background-color:${themeColors.background};margin:24rpx 0;border-radius:8rpx;padding:40rpx 20rpx 20rpx 20rpx;overflow-x:auto;box-shadow:0 4rpx 12rpx rgba(0,0,0,0.08);border:1rpx solid ${themeColors.border};border-left:4rpx solid ${themeColors.accent || themeColors.keyword};white-space:pre;width:fit-content;min-width:100%;font-size:26rpx;line-height:1.6;" class="code-block hljs$1">`);
+      
+      // 为代码语言标签添加内联样式，支持主题
+      html = html.replace(/<div class="code-language-label">(.*?)<\/div>/g,
+        `<div style="position:absolute;top:0;right:0;background-color:${themeColors.accent || themeColors.keyword};color:white;font-size:20rpx;padding:6rpx 12rpx;border-radius:0 8rpx 0 8rpx;opacity:0.9;font-family:system-ui;text-transform:uppercase;z-index:10;font-weight:bold;" class="code-language-label">$1</div>`);
+      
+      // 为code标签添加内联样式，支持主题
+      html = html.replace(/<code>/g, 
+        `<code style="display:block;color:${themeColors.text};font-size:26rpx;line-height:1.6;white-space:pre;background:transparent;padding:0;overflow-x:visible;width:max-content;">`);
+      
+      // 为行内代码添加内联样式，支持主题
+      html = html.replace(/<code class="inline-code">/g, 
+        `<code style="font-family:'Source Code Pro',Consolas,monospace;padding:4rpx 8rpx;margin:0 4rpx;background-color:${this.data.theme === 'dark' ? 'rgba(255,255,255,0.1)' : themeColors.background};color:${themeColors.built_in || themeColors.keyword};border-radius:4rpx;font-size:25rpx;white-space:pre-wrap;word-break:break-all;border:1rpx solid ${this.data.theme === 'dark' ? 'rgba(255,255,255,0.1)' : themeColors.border};" class="inline-code">`);
+      
+      // 为高亮的span添加样式
+      Object.keys(themeColors).forEach(key => {
+        if (key !== 'background' && key !== 'text' && key !== 'border') {
+          const regex = new RegExp(`<span class="${key}">`, 'g');
+          html = html.replace(regex, `<span style="color:${themeColors[key]};" class="${key}">`);
+        }
+      });
+      
+      // 打印生成的HTML便于调试
+      console.log("Rendered markdown HTML (excerpt):", 
+          html.length > 100 ? html.substring(0, 100) + "..." : html);
+      
+      // 更新渲染内容
+      this.setData({ 
+        renderedContent: html 
+      }, () => {
+        console.log("渲染内容已更新");
+      });
+    } catch (error) {
+      console.error("Markdown渲染错误:", error);
+      // 显示错误信息
+      this.setData({ 
+        renderedContent: `<div style="color:red;">Rendering error: ${error.message}</div>` 
+      });
+    }
   },
 
   // Markdown 渲染防抖
@@ -486,23 +563,62 @@ Page({
   // 格式化文本 (示例，依赖 editorUtils)
   formatText: function(e) {
     const type = e.currentTarget.dataset.type;
+    console.log("点击了格式化按钮:", type); // 添加调试日志
+    
+    // 修复链接和图片功能
+    if (type === 'link') {
+        // 处理链接
+        console.log("处理链接功能");
+        const { content, cursorPosition } = this.data;
+        // 调用 editorUtils 处理插入逻辑
+        const { newContent, selection } = editorUtils.insertMarkdownSyntax(content, cursorPosition, 'link');
+        if (newContent !== content) {
+            this.setData({ 
+                content: newContent, 
+                cursorPosition: selection || cursorPosition, 
+                saveStatus: '编辑中...' 
+            });
+            this.addToHistory(newContent);
+            if (this.data.livePreview && this.data.editMode === 'split') {
+                this.renderMarkdownDebounced();
+            }
+        }
+        return;
+    }
+    
     if (type === 'image') {
+        console.log("处理图片功能");
         this.chooseImage();
         return;
     }
     
     // 特殊处理代码块，可以选择语言
     if (type === 'codeblock') {
+        console.log("处理代码块功能"); // 添加调试日志
         const { content, cursorPosition } = this.data;
         
+        // 获取支持的语言列表 - 使用新的方法
+        const supportedLanguages = markdownUtils.getSupportedLanguages();
+        console.log("支持的语言:", supportedLanguages);
+        
+        // 按照首选语言排序
+        const preferredOrder = ['java', 'javascript', 'python', 'cpp', 'sql', 'mysql', 'html', 'css'];
+        const sortedLanguages = preferredOrder.filter(lang => supportedLanguages.includes(lang))
+            .concat(supportedLanguages.filter(lang => !preferredOrder.includes(lang)));
+        
+        // 显示的语言说明 - 特别指出我们优先支持的语言
+        const languageDescription = "主要支持: Java, JavaScript, Python, C/C++, SQL";
+        
         wx.showActionSheet({
-          itemList: ['普通代码块', 'JavaScript', 'Python', 'HTML', 'CSS', 'Java', 'C++', 'Go', 'SQL'],
+          itemList: ['普通代码块', ...sortedLanguages.slice(0, 9)], // 限制显示的语言数量
           success: (res) => {
+            console.log("选择了语言:", res.tapIndex); // 添加调试日志
             let codeBlockPrefix = '```\n';
+            
             if (res.tapIndex > 0) {
               // 选择了特定语言
-              const languages = ['', 'javascript', 'python', 'html', 'css', 'java', 'cpp', 'go', 'sql'];
-              codeBlockPrefix = '```' + languages[res.tapIndex] + '\n';
+              const language = sortedLanguages[res.tapIndex - 1];
+              codeBlockPrefix = '```' + language + '\n';
             }
             
             // 插入代码块
@@ -521,6 +637,25 @@ Page({
             this.setData({ 
               content: newContent, 
               cursorPosition: newCursorPos,
+              saveStatus: '编辑中...' 
+            });
+            this.addToHistory(newContent);
+            if (this.data.livePreview && this.data.editMode === 'split') {
+              this.renderMarkdownDebounced();
+            }
+          },
+          fail: (err) => {
+            console.error("选择代码块语言失败:", err); // 添加错误日志
+            // 如果出错，使用基本代码块
+            const selectedText = content.substring(cursorPosition.start, cursorPosition.end);
+            const newContent = content.substring(0, cursorPosition.start) + 
+                             '```\n' + 
+                             selectedText + 
+                             '\n```' + 
+                             content.substring(cursorPosition.end);
+            
+            this.setData({ 
+              content: newContent, 
               saveStatus: '编辑中...' 
             });
             this.addToHistory(newContent);
@@ -550,25 +685,51 @@ Page({
   
   // 选择图片 (示例)
   chooseImage: function() {
+    console.log("启动选择图片功能");
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
       sourceType: ['album', 'camera'],
       success: (res) => {
+        console.log("选择图片成功:", res);
         const tempFilePath = res.tempFiles[0].tempFilePath;
         // TODO: 上传图片到服务器或云存储，获取 URL
         const imageUrl = tempFilePath; // 暂时使用本地路径
         
         // 插入图片 Markdown
         const { content, cursorPosition } = this.data;
+        console.log("插入图片, 当前光标位置:", cursorPosition);
         const imageMarkdown = `![图片](${imageUrl})`;
-        const { newContent } = editorUtils.insertText(content, cursorPosition.start, imageMarkdown);
         
-        this.setData({ content: newContent, saveStatus: '编辑中...' });
+        // 直接在光标位置插入图片标记
+        const newContent = content.substring(0, cursorPosition.start) + 
+                           imageMarkdown + 
+                           content.substring(cursorPosition.end);
+                           
+        const newCursorPos = {
+          start: cursorPosition.start + imageMarkdown.length,
+          end: cursorPosition.start + imageMarkdown.length
+        };
+        
+        this.setData({ 
+          content: newContent, 
+          cursorPosition: newCursorPos,
+          saveStatus: '编辑中...' 
+        });
+        
         this.addToHistory(newContent);
          if (this.data.livePreview && this.data.editMode === 'split') {
             this.renderMarkdownDebounced();
         }
+        
+        console.log("图片插入完成");
+      },
+      fail: (err) => {
+        console.error("选择图片失败:", err);
+        wx.showToast({
+          title: '选择图片失败',
+          icon: 'none'
+        });
       }
     });
   },
@@ -1102,11 +1263,20 @@ Page({
     console.log('Editor page received theme change:', theme);
     this.setData({ theme: theme });
     
+    // 更新highlight.js的主题设置
+    hljs.setTheme(theme);
+    
     // 更新导航栏组件主题
     this.updateNavBarComponentTheme(theme);
     
     // 根据主题更新导航栏颜色
     this.updateNavBarStyle(theme);
+    
+    // 如果启用了实时预览，更新渲染内容以应用新主题
+    if (this.data.livePreview && 
+        (this.data.editMode === 'split' || this.data.editMode === 'preview')) {
+      this.renderMarkdown();
+    }
   },
   
   // 更新导航栏组件主题
