@@ -29,6 +29,11 @@ App({
     this.loadUserInfo();
     // 加载标签数据
     this.loadTags();
+    
+    // 创建示例文档和示例标签
+    const documentUtils = require('./utils/document');
+    documentUtils.createSampleDocuments();
+    documentUtils.createSampleTag();
   },
   
   // 初始化主题 (Refactored)

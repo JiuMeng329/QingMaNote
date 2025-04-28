@@ -57,7 +57,7 @@ Page({
       {name: '大', value: 'large'}
     ],
     // 版本信息
-    version: 'v1.0.5',
+    version: 'v1.0.7',
     // 是否显示选择器
     showThemeSelector: false,
     showFontSelector: false,
@@ -238,7 +238,7 @@ Page({
   },
   viewAbout: function() {
     wx.showModal({
-      title: '关于 MarkMark',
+      title: '关于 轻码笔记',
       content: `版本: ${this.data.version}\n作者: 旧梦\n邮箱: 2070360680@qq.com`, 
       showCancel: false,
       confirmText: '确定'
@@ -983,7 +983,7 @@ Page({
   
   viewAbout: function() {
     wx.showModal({
-      title: '关于 MarkMark',
+      title: '关于 轻码笔记',
       content: `版本: ${this.data.version}\n作者: 旧梦\n邮箱: 2070360680@qq.com`, // 更新作者和邮箱
       showCancel: false,
       confirmText: '确定'

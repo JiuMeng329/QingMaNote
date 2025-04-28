@@ -753,7 +753,12 @@ Page({
 
   // 显示更多菜单
   showMoreMenu: function() {
-    this.setData({ showMenu: true });
+    // 获取当前主题并应用到菜单
+    const currentTheme = app.getCurrentTheme();
+    this.setData({ 
+      showMenu: true,
+      theme: currentTheme
+    });
   },
   
   // 隐藏更多菜单
@@ -936,7 +941,7 @@ Page({
     ctx.font = '28px sans-serif';
     ctx.fillStyle = '#999999';
     ctx.textAlign = 'center';
-    ctx.fillText('由MarkMark生成的Markdown文档', canvasWidth / 2, canvasHeight - 100);
+    ctx.fillText('由轻码笔记生成的Markdown文档', canvasWidth / 2, canvasHeight - 100);
     ctx.fillText('打开小程序查看完整内容', canvasWidth / 2, canvasHeight - 50);
     
     // 添加小程序码或应用图标
@@ -1030,7 +1035,7 @@ Page({
     this.saveDocument();
     
     const exportUtil = require('../../utils/exportUtil');
-    const title = that.data.documentTitle || 'document';
+    const title = that.data.documentTitle || '轻码笔记文档';
     const content = that.data.content || '';
     const filename = `${title}.md`;
     
@@ -1075,7 +1080,7 @@ Page({
     this.saveDocument();
     
     const exportUtil = require('../../utils/exportUtil');
-    const title = that.data.documentTitle || 'document';
+    const title = that.data.documentTitle || '轻码笔记文档';
     const content = that.data.content || '';
     const filename = `${title}.html`;
     

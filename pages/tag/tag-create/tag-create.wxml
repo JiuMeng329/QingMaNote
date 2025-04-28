@@ -1,6 +1,6 @@
 <!--pages/tag/tag-create/tag-create.wxml-->
-<navigation-bar title="{{mode === 'create' ? '新建标签' : '编辑标签'}}" back="{{true}}" color="black" background="#FFF"></navigation-bar>
-<view class="tag-create-container">
+<navigation-bar title="{{mode === 'create' ? '新建标签' : '编辑标签'}}" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}"></navigation-bar>
+<view class="tag-create-container theme-{{theme}}">
   <!-- 标签名称 -->
   <view class="form-item">
     <view class="form-label">标签名称</view>

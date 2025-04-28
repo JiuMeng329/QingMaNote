@@ -21,7 +21,7 @@ Page({
         path: '/pages/help/version/version'
       }
     ],
-    version: 'v1.0.5',
+    version: 'v1.0.7',
     currentTheme: 'light',
     fontClass: ''
   },

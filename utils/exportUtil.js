@@ -671,7 +671,7 @@ async function renderSinglePage(ctx, content, title, width, height, pageNumber, 
   ctx.font = '14px Arial';
   ctx.fillStyle = '#999999';
   ctx.textAlign = 'center';
-  ctx.fillText(`由 MarkMark 生成 - 第${pageNumber}页/共${totalPages}页`, width / 2, height - 20);
+  ctx.fillText(`由 轻码笔记 生成 - 第${pageNumber}页/共${totalPages}页`, width / 2, height - 20);
   
   return true;
 }

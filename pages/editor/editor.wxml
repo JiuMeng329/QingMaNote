@@ -1,7 +1,7 @@
 <view class="theme-{{theme}}">
 <view id="page-root">
 <!--pages/editor/editor.wxml-->
-<navigation-bar title="{{documentTitle}}" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}">
+<navigation-bar title="{{documentTitle}}" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}">
   <view slot="center" class="nav-center">
     <text>{{documentTitle}}</text>
   </view>

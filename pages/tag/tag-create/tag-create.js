@@ -1,6 +1,7 @@
 // pages/tag/tag-create/tag-create.js
 // 导入文档工具模块
 const documentUtils = require('../../../utils/document');
+const app = getApp(); // 获取 app 实例
 
 Page({
   data: {
@@ -18,10 +19,13 @@ Page({
       '#EB2F96', // 粉色
       '#666666', // 灰色
       '#000000'  // 黑色
-    ]
+    ],
+    theme: 'light' // 添加 theme 状态
   },
 
   onLoad: function(options) {
+    this.updateTheme(); // 加载时更新主题
+
     // 判断是创建模式还是编辑模式
     if (options.mode === 'edit' && options.id) {
       this.setData({
@@ -40,6 +44,30 @@ Page({
         });
       }
     }
+  },
+
+  onShow: function() {
+    // 页面显示时也可能需要更新主题，以防从后台切换回来时系统主题已改变
+    this.updateTheme(); 
+  },
+
+  // --- 主题相关方法 ---
+  // 更新主题状态
+  updateTheme() {
+    if (app.getCurrentTheme) {
+      const theme = app.getCurrentTheme();
+      this.setData({ theme: theme });
+      // 可选：根据主题更新导航栏颜色等
+      // this.updateNavBarStyle(theme);
+    }
+  },
+
+  // 主题变化回调
+  onThemeChange(theme) {
+    console.log('Tag Create page received theme change:', theme);
+    this.setData({ theme: theme });
+    // 可选：根据主题更新导航栏颜色等
+    // this.updateNavBarStyle(theme);
   },
 
   // 输入标签名称

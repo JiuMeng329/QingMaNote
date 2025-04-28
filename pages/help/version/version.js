@@ -1,7 +1,7 @@
 // pages/help/version/version.js
 Page({
   data: {
-    currentVersion: 'v1.0.5',
+    currentVersion: 'v1.0.7',
     versionHistory: [
       {
         version: 'v1.0.0',
@@ -47,6 +47,23 @@ Page({
         date: '2025-04-25',
         changes: [
           '优化代码高亮功能',
+          '修复已知问题'
+        ]
+      },
+      {
+        version: 'v1.0.6',
+        date: '2025-04-27',
+        changes: [
+          '优化新建文件与新建标签界面',
+          '优化将文件添加到标签功能',
+          '修复已知问题'
+        ]
+      },
+      {
+        version: 'v1.0.7',
+        date: '2025-04-28',
+        changes: [
+          '新添加示例文件',
           '修复已知问题'
         ]
       }

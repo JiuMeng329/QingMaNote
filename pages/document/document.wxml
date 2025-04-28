@@ -48,7 +48,7 @@
     <!-- 空状态 -->
     <block wx:else>
       <view class="empty-state">
-        <image class="empty-icon" src="/image/empty_document.png" mode="aspectFit"></image>
+        <image class="empty-icon" src="/image/icon_empty.svg" mode="aspectFit"></image>
         <view class="empty-text">{{searchValue ? '未找到相关文档' : (currentTagId ? '此标签下暂无文档' : '暂无文档')}}</view>
         <view class="empty-subtext" wx:if="{{!searchValue}}">{{currentTagId ? '可以尝试将文档添加到此标签' : '点击底部导航栏的 "+" 按钮创建新文档'}}</view>
       </view>

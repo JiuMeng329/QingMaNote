@@ -11,6 +11,7 @@
     "pages/tag/select-tag",
     "pages/tag/tag-create/tag-create",
     "pages/tag/tag-detail/tag-detail",
+    "pages/document/select-document",
     "pages/search/search",
     "pages/more/more",
     "pages/import/import",
@@ -22,7 +23,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "MarkMark",
+    "navigationBarTitleText": "轻码笔记",
     "navigationBarTextStyle": "black",
     "navigationStyle": "custom"
   },

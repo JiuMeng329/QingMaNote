@@ -1,6 +1,7 @@
 // pages/create/create.js
 // 导入文档工具模块
 const documentUtils = require('../../utils/document');
+const app = getApp(); // 获取 app 实例
 
 Page({
   data: {
@@ -8,17 +9,39 @@ Page({
     // documentType: '未分类', // 暂时移除类型功能
     // templates: [ ... ], // 暂时移除模板功能
     allTags: [], // 所有可选标签
-    selectedTagIds: [] // 已选中的标签ID
+    selectedTagIds: [], // 已选中的标签ID
+    theme: 'light' // 添加 theme 状态
   },
   
   onLoad: function() {
+    this.updateTheme(); // 加载时更新主题
     // 加载所有标签
     this.loadAllTags();
   },
   
   onShow: function() {
+    this.updateTheme(); // 页面显示时更新主题
     // 页面显示时可以考虑重新加载标签，以防标签有变动
      this.loadAllTags();
+  },
+  
+  // --- 主题相关方法 ---
+  // 更新主题状态
+  updateTheme() {
+    if (app.getCurrentTheme) {
+      const theme = app.getCurrentTheme();
+      this.setData({ theme: theme });
+      // 可选：根据主题更新导航栏颜色等
+      // this.updateNavBarStyle(theme);
+    }
+  },
+
+  // 主题变化回调
+  onThemeChange(theme) {
+    console.log('Create page received theme change:', theme);
+    this.setData({ theme: theme });
+    // 可选：根据主题更新导航栏颜色等
+    // this.updateNavBarStyle(theme);
   },
   
   // 加载所有标签

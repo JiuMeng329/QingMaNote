@@ -174,22 +174,26 @@ Page({
 
   // 添加文档到标签
   addDocument: function() {
-    // 这里需要跳转到一个文档选择页面，让用户选择要添加到此标签的文档
-    // 假设选择页面路径为 /pages/document/select-document
+    const that = this;
     wx.navigateTo({
-      url: '/pages/document/select-document?mode=addTag&tagId=' + this.data.tagId
+      url: '/pages/document/select-document?tagId=' + this.data.tagId,
+      events: {
+        // 文档选择完成后的回调，如果需要的话
+        selectDocuments: function(selectedDocIds) {
+          that.loadTagData(that.data.tagId);
+        }
+      },
+      success: function(res) {
+        // 可以在这里向被打开页面传递数据
+        // res.eventChannel.emit('传递数据的事件名', { data: '数据' })
+      }
     });
-    // 或者，如果文档选择逻辑比较复杂，可以在当前页面弹出选择器
-    // wx.showToast({
-    //   title: '功能开发中',
-    //   icon: 'none'
-    // });
   },
   
   // 用户点击右上角分享
   onShareAppMessage: function() {
     return {
-      title: this.data.tag ? `标签：${this.data.tag.name} - MarkMark` : 'MarkMark标签分享',
+      title: this.data.tag ? `标签：${this.data.tag.name} - 轻码笔记` : '轻码笔记标签分享',
       path: '/pages/tag/tag-detail/tag-detail?id=' + this.data.tagId,
       // 可以添加 imageUrl
       // imageUrl: '...'
@@ -199,7 +203,7 @@ Page({
   // 如果需要分享到朋友圈，可以添加 onShareTimeline
   onShareTimeline: function() {
      return {
-      title: this.data.tag ? `标签：${this.data.tag.name}` : 'MarkMark标签',
+      title: this.data.tag ? `标签：${this.data.tag.name}` : '轻码笔记标签',
       query: 'id=' + this.data.tagId,
       // imageUrl: '...'
     };

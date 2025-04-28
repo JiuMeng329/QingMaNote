@@ -1,0 +1,62 @@
+<view class="theme-{{theme}}">
+<view id="page-root" class="{{globalStyleClass}}">
+<!--pages/document/select-document.wxml-->
+<navigation-bar title="选择文档" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}">
+  <view slot="right" class="nav-right">
+    <view class="nav-btn save" bindtap="saveSelection">完成</view>
+  </view>
+</navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="document-container">
+    <!-- 搜索框 -->
+    <view class="search-box">
+      <view class="search-input-wrapper">
+        <icon type="search" size="14" color="#999"></icon>
+        <input class="search-input" placeholder="搜索文档..." value="{{searchValue}}" bindinput="onSearch" confirm-type="search"/>
+        <icon wx:if="{{searchValue}}" type="clear" size="14" color="#999" bindtap="clearSearch"></icon>
+      </view>
+    </view>
+
+    <!-- 已选文档计数 -->
+    <view class="selected-count" wx:if="{{selectedDocs.length > 0}}">
+      <text class="count-text">已选择 {{selectedDocs.length}} 个文档</text>
+    </view>
+
+    <!-- 文档列表 -->
+    <view class="document-list" wx:if="{{allDocs.length > 0}}">
+      <view class="document-item {{item.selected ? 'selected' : ''}}" 
+            wx:for="{{allDocs}}" 
+            wx:key="id" 
+            data-id="{{item.id}}"
+            bindtap="toggleDocSelection">
+        <!-- 文档图标 -->
+        <view class="document-icon">
+           <image class="doc-icon-image" src="/image/icon_document.svg"></image>
+        </view>
+        <!-- 文档信息 -->
+        <view class="document-info">
+          <view class="document-title">{{item.title}}</view>
+          <view class="document-meta">
+            <text>{{item.updateTimeFormatted || '未知时间'}}</text>
+          </view>
+        </view>
+        <!-- 选中状态指示器 -->
+        <view class="selection-indicator">
+          <view class="selection-dot {{item.selected ? 'selected' : ''}}"></view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <block wx:else>
+      <view class="empty-state">
+        <image class="empty-icon" src="/image/icon_empty.svg" mode="aspectFit"></image>
+        <view class="empty-text">{{searchValue ? '未找到相关文档' : '暂无文档'}}</view>
+        <view class="empty-subtext" wx:if="{{!searchValue}}">创建文档后可添加到标签</view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+</view>
+</view> 

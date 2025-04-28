@@ -1,0 +1,226 @@
+/* pages/document/select-document.wxss */
+page {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --text-secondary-color: #666666;
+  --border-color: #eeeeee;
+  --primary-color: #3E7FFF;
+  --primary-light-color: #E6EFFF;
+  --danger-color: #FF4D4F;
+  --success-color: #52C41A;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --svg-filter: none;
+}
+
+.theme-dark {
+  --bg-color: #1E1E1E;
+  --text-color: #FFFFFF;
+  --text-secondary-color: #AAAAAA;
+  --border-color: #333333;
+  --primary-color: #3E7FFF;
+  --primary-light-color: #1E3A8A;
+  --danger-color: #FF4D4F;
+  --success-color: #52C41A;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --svg-filter: invert(100%);
+}
+
+.theme-github {
+  --bg-color: #0D1117;
+  --text-color: #c9d1d9;
+  --text-secondary-color: #8b949e;
+  --border-color: #30363d;
+  --primary-color: #58a6ff;
+  --primary-light-color: #1f6feb;
+  --danger-color: #f85149;
+  --success-color: #56d364;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --svg-filter: invert(85%) hue-rotate(180deg);
+}
+
+#page-root {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.document-container {
+  padding: 24rpx;
+  min-height: 100%;
+}
+
+/* 导航栏右侧按钮 */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-btn.save {
+  color: var(--primary-color);
+  font-size: 28rpx;
+  padding: 0 20rpx;
+}
+
+/* 搜索框 */
+.search-box {
+  padding: 0 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg-color);
+  border-radius: 16rpx;
+  padding: 16rpx 24rpx;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color);
+}
+
+.search-input {
+  flex: 1;
+  margin: 0 16rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+/* 已选文档计数 */
+.selected-count {
+  padding: 0 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.count-text {
+  font-size: 28rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* 文档列表 */
+.document-list {
+  padding: 0 16rpx;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg-color);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx var(--shadow-color);
+  position: relative;
+}
+
+.document-item.selected {
+  background-color: var(--primary-light-color);
+}
+
+.document-icon {
+  margin-right: 24rpx;
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.doc-icon-image {
+  width: 48rpx;
+  height: 48rpx;
+  filter: var(--svg-filter);
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-title {
+  font-size: 32rpx;
+  color: var(--text-color);
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.document-meta {
+  font-size: 24rpx;
+  color: var(--text-secondary-color);
+}
+
+/* 选择指示器 */
+.selection-indicator {
+  padding-left: 16rpx;
+}
+
+.selection-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  border: 2rpx solid var(--border-color);
+  box-sizing: border-box;
+}
+
+.selection-dot.selected {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 30rpx;
+  filter: var(--svg-filter);
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: var(--text-color); /* Use variable */
+  margin-bottom: 10rpx;
+  font-weight: 500;
+}
+
+.empty-subtext {
+  font-size: 28rpx;
+  color: var(--text-secondary-color); /* Use variable */
+}
+
+/* 加载中 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+}
+
+.loading-indicator {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: var(--text-secondary-color);
+} 

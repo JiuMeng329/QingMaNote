@@ -3,13 +3,13 @@ page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #F6F6F6;
+  background-color: var(--bg-color);
 }
 
 .create-container {
   flex: 1;
   padding: 30rpx;
-  background-color: #FFFFFF;
+  background-color: var(--card-bg-color, var(--bg-color));
 }
 
 .form-item {
@@ -18,16 +18,17 @@ page {
 
 .form-label {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 20rpx;
   font-weight: 500;
 }
 
 .form-input {
   height: 80rpx;
-  border-bottom: 1rpx solid #EEEEEE;
+  border-bottom: 1rpx solid var(--border-color);
   font-size: 28rpx;
   padding: 0 10rpx;
+  color: var(--text-color);
 }
 
 .type-selector {
@@ -35,14 +36,15 @@ page {
   justify-content: space-between;
   align-items: center;
   height: 80rpx;
-  border-bottom: 1rpx solid #EEEEEE;
+  border-bottom: 1rpx solid var(--border-color);
   font-size: 28rpx;
   padding: 0 10rpx;
+  color: var(--text-color);
 }
 
 .arrow-icon {
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-secondary-color);
 }
 
 .template-list {
@@ -63,7 +65,7 @@ page {
 .template-icon {
   width: 100rpx;
   height: 100rpx;
-  background-color: #F6F6F6;
+  background-color: var(--bg-secondary-color, var(--bg-color));
   border-radius: 10rpx;
   display: flex;
   justify-content: center;
@@ -73,7 +75,7 @@ page {
 
 .template-name {
   font-size: 24rpx;
-  color: #333;
+  color: var(--text-color);
   text-align: center;
 }
 
@@ -92,14 +94,14 @@ page {
   justify-content: center;
   margin-right: 20rpx;
   margin-bottom: 20rpx;
-  color: #FFFFFF;
+  color: var(--text-color-inverse, #FFFFFF);
   font-size: 24rpx;
-  background-color: var(--tag-color, #1890FF); /* 添加背景颜色，使用CSS变量 */
+  background-color: var(--tag-color);
 }
 
 .tag-item.selected {
-  border: 2rpx solid #FFFFFF;
-  box-shadow: 0 0 0 2rpx var(--tag-color); /* 添加选中效果 */
+  border: 2rpx solid var(--text-color-inverse, #FFFFFF);
+  box-shadow: 0 0 0 2rpx var(--tag-color);
 }
 
 .add-tag {
@@ -111,9 +113,9 @@ page {
   justify-content: center;
   margin-right: 20rpx;
   margin-bottom: 20rpx;
-  color: #666;
+  color: var(--text-secondary-color);
   font-size: 24rpx;
-  background-color: #F6F6F6;
+  background-color: var(--bg-secondary-color, var(--bg-color));
 }
 
 .plus-icon {
@@ -129,7 +131,7 @@ page {
 .create-btn {
   height: 88rpx;
   background-color: var(--primary-color);
-  color: #fff;
+  color: var(--text-color-inverse, #fff);
   border-radius: 44rpx;
   display: flex;
   align-items: center;
@@ -140,7 +142,7 @@ page {
 
 .import-btn {
   height: 88rpx;
-  background-color: #fff;
+  background-color: var(--card-bg-color, var(--bg-color));
   color: var(--primary-color);
   border: 2rpx solid var(--primary-color);
   border-radius: 44rpx;
@@ -151,7 +153,7 @@ page {
 }
 
 .create-btn[disabled] {
-  background-color: #ccc !important;
+  background-color: var(--disabled-color, #ccc) !important;
   color: var(--text-color-inverse);
 }
 

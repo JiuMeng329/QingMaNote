@@ -1,5 +1,5 @@
 <!--pages/help/help.wxml-->
-<navigation-bar title="帮助中心" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="帮助中心" back="{{true}}" color="{{currentTheme === 'light' ? 'black' : (currentTheme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{currentTheme === 'light' ? '#FFF' : (currentTheme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{currentTheme}}"></navigation-bar>
 <view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
 
 <scroll-view class="scrollarea" scroll-y type="list">
@@ -7,7 +7,7 @@
     <!-- 帮助中心标题 -->
     <view class="help-header">
       <view class="help-title">帮助中心</view>
-      <view class="help-subtitle">让您更好地使用MarkMark</view>
+      <view class="help-subtitle">让您更好地使用轻码笔记</view>
     </view>
 
     <!-- 帮助项列表 -->

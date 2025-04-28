@@ -1,6 +1,6 @@
 <!--pages/create/create.wxml-->
-<navigation-bar title="新建文档" back="{{true}}" color="black" background="#FFF"></navigation-bar>
-<view class="create-container">
+<navigation-bar title="新建文档" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}"></navigation-bar>
+<view class="create-container theme-{{theme}}">
   <!-- 文档标题 -->
   <view class="form-item">
     <view class="form-label">文档标题</view>
@@ -15,7 +15,7 @@
         class="tag-item {{item.selected ? 'selected' : ''}}" 
         wx:for="{{allTags}}" 
         wx:key="id" 
-        style="--tag-color: {{item.color || '#ccc'}};"
+        style="--tag-color: {{item.color || 'var(--disabled-color, #ccc)'}};"
         bindtap="selectTag"
         data-id="{{item.id}}"
       >

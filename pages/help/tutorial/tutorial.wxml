@@ -6,7 +6,7 @@
   <view class="tutorial-container">
     <view class="tutorial-header">
       <view class="tutorial-title">功能介绍/使用教程</view>
-      <view class="tutorial-subtitle">了解MarkMark的主要功能</view>
+      <view class="tutorial-subtitle">了解轻码笔记的主要功能</view>
     </view>
     
     <view class="features-list">

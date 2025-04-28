@@ -23,9 +23,9 @@
 
 .weui-navigation-bar.theme-dark .weui-navigation-bar__btn_goback,
 .weui-navigation-bar.theme-github .weui-navigation-bar__btn_goback {
-  background-color: var(--weui-FG-0);
-  /* 替换返回按钮背景图为白色版本 */
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24' viewBox='0 0 12 24'%3E  %3Cpath fill='%23ffffff' fill-opacity='.9' fill-rule='evenodd' d='M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5 10 4.563 2.682 12 10 19.438z'/%3E%3C/svg%3E");
+  background-color: transparent;
+  /* 使用新的返回按钮图标 */
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z'%3E%3C/path%3E%3C/svg%3E");
 }
 
 .weui-navigation-bar {
@@ -80,16 +80,14 @@
 }
 
 .weui-navigation-bar__btn_goback {
-  font-size: 12px;
-  width: 12px;
+  width: 24px;
   height: 24px;
-  /* 使用背景图片替代mask，兼容Skyline渲染模式 */
-  background-color: var(--weui-FG-0);
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24' viewBox='0 0 12 24'%3E  %3Cpath fill='%23ffffff' fill-opacity='.9' fill-rule='evenodd' d='M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5 10 4.563 2.682 12 10 19.438z'/%3E%3C/svg%3E");
+  /* 使用新的返回图标 */
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
-  /* 移除background-size: cover，使用具体尺寸 */
-  background-size: 12px 24px;
+  background-size: 24px 24px;
 }
 
 .weui-navigation-bar__center {
