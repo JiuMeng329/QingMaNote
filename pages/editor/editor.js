@@ -58,6 +58,8 @@ Page({
     // 编辑模式：'edit'(纯编辑)、'split'(分屏预览)或'preview'(全屏预览)
     editMode: 'edit',
     theme: 'light',
+    // 字体样式
+    fontStyleClass: '',
     // --- Spell Check State ---
     spellCheckEnabled: false,
     spellErrors: [],
@@ -188,6 +190,9 @@ Page({
     }
 
     this.updateTheme();
+
+    // 应用全局字体样式
+    this.applyGlobalFontStyle();
   },
 
   onShow: function() {
@@ -242,6 +247,9 @@ Page({
     }
 
     this.updateTheme();
+
+    // 检查并应用全局样式
+    this.applyGlobalFontStyle();
   },
 
   onHide: function() {
@@ -1396,6 +1404,26 @@ Page({
       this.triggerSpellCheck(); 
     } else {
       this.setData({ selectedErrorWord: null });
+    }
+  },
+
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const app = getApp();
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Editor page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Editor page received style change');
+    this.applyGlobalFontStyle();
+    
+    // 如果启用了实时预览，重新渲染内容以应用新样式
+    if (this.data.livePreview && 
+        (this.data.editMode === 'split' || this.data.editMode === 'preview')) {
+      this.renderMarkdown();
     }
   },
 })

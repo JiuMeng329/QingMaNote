@@ -15,7 +15,8 @@ Page({
     currentDoc: {},
     pageTitle: '所有文档', // 页面标题
     currentTagId: null, // 用于记录当前是否在查看特定标签
-    theme: 'light' // Add theme state
+    theme: 'light', // Add theme state
+    fontStyleClass: '' // 添加字体样式类
   },
 
   onLoad: function(options) {
@@ -34,6 +35,7 @@ Page({
       this.loadDocuments();
     }
     this.updateTheme(); // Update theme on load
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
   
   onShow: function() {
@@ -46,6 +48,7 @@ Page({
     }
     
     this.updateTheme(); // Update theme on show
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
   
   // 加载所有文档列表
@@ -325,5 +328,17 @@ Page({
     console.log('Document page received theme change:', theme);
     this.setData({ theme: theme });
     // Update navigation bar style if needed
+  },
+
+  applyGlobalFontStyle() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Document page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Document page received style change');
+    this.applyGlobalFontStyle();
   }
 });

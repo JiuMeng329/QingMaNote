@@ -1,5 +1,5 @@
 <view class="theme-{{theme}}">
-<view id="page-root">
+<view id="page-root" class="{{fontStyleClass}}">
 <!--pages/editor/editor.wxml-->
 <navigation-bar title="{{documentTitle}}" back="{{true}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}">
   <view slot="center" class="nav-center">

@@ -1,4 +1,4 @@
-<view class="theme-{{theme}}">
+<view class="theme-{{theme}} {{fontStyleClass}}">
 <view id="page-root">
 <!--pages/tag/tag.wxml-->
 <navigation-bar title="标签管理" back="{{false}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}"></navigation-bar>

@@ -1,6 +1,6 @@
 <!--pages/help/markdown/markdown.wxml-->
 <navigation-bar title="Markdown语法指南" back="{{true}}" color="black" background="#FFF"></navigation-bar>
-<view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
+<view id="page-root" class="theme-{{currentTheme}} {{fontStyleClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
 
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="markdown-container">

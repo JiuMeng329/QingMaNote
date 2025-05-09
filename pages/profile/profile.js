@@ -43,21 +43,25 @@ Page({
     ],
     // 跟随系统选项
     systemThemeOption: { name: '跟随系统', value: 'system' },
-    // 字体选项 (保持不变)
+    // 字体选项 (更新增加新的字体)
     fontOptions: [
       {name: '系统默认', value: 'system'},
       {name: '衬线字体', value: 'serif'},
       {name: '无衬线字体', value: 'sans-serif'},
-      {name: '楷书', value: 'kai'}
+      {name: '楷书', value: 'kai'},
+      {name: '等宽字体', value: 'monospace'},
+      {name: '圆体', value: 'rounded'}
     ],
     // 字号选项 (保持不变)
     fontSizeOptions: [
+      {name: '特小', value: 'xs'},
       {name: '小', value: 'small'},
       {name: '中', value: 'medium'},
-      {name: '大', value: 'large'}
+      {name: '大', value: 'large'},
+      {name: '特大', value: 'xl'}
     ],
     // 版本信息
-    version: 'v1.0.7',
+    version: 'v1.0.8',
     // 是否显示选择器
     showThemeSelector: false,
     showFontSelector: false,
@@ -149,12 +153,16 @@ Page({
       'settings.storage': app.globalData.storage || { used: 'N/A', total: 'N/A' } // 添加默认值
     });
     // 应用字体和字号样式
-    this.applyFontAndSizeClass();
+    this.updatePageStyle();
   },
 
-  applyFontAndSizeClass() {
-    const fontClass = `font-${app.globalData.font || 'system'} font-size-${app.globalData.fontSize || 'medium'}`;
+  updatePageStyle: function() {
+    const app = getApp();
+    const globalSettings = app.globalData;
+    const currentTheme = app.getCurrentTheme();
+    const fontClass = `theme-${currentTheme} font-${globalSettings.font || 'system'} font-size-${globalSettings.fontSize || 'medium'}`;
     this.setData({ fontClass: fontClass });
+    console.log('更新页面样式类:', fontClass);
   },
 
   // --- 字体/字号切换 (基本不变, 调用 saveOtherSettings) ---
@@ -165,6 +173,7 @@ Page({
     this.setData({ showFontSelector: false });
   },
   selectFont: function(e) {
+    const app = getApp();
     const selectedIndex = e.currentTarget.dataset.index;
     const selectedFont = this.data.fontOptions[selectedIndex];
 
@@ -173,10 +182,18 @@ Page({
       showFontSelector: false
     });
     
+    // 更新全局设置
     app.globalData.font = selectedFont.value;
-    app.saveOtherSettings(); // 保存其他设置
-    this.applyFontAndSizeClass(); // 更新当前页字体样式类
-    // 注意：字体变化也应通知其他页面，但此方案暂未实现
+    app.saveOtherSettings();
+    
+    // 更新当前页面样式
+    this.updatePageStyle();
+    
+    // 记录字体变更
+    console.log('字体已更改为:', selectedFont.name, '(', selectedFont.value, ')');
+    
+    // 通知所有页面字体已更改
+    app.notifyAllPagesStyleChanged();
   },
   switchFontSize: function() {
     this.setData({ showFontSizeSelector: true });
@@ -185,6 +202,7 @@ Page({
     this.setData({ showFontSizeSelector: false });
   },
   selectFontSize: function(e) {
+    const app = getApp();
     const selectedIndex = e.currentTarget.dataset.index;
     const selectedSize = this.data.fontSizeOptions[selectedIndex];
 
@@ -193,26 +211,37 @@ Page({
       showFontSizeSelector: false
     });
     
+    // 更新全局设置
     app.globalData.fontSize = selectedSize.value;
-    app.saveOtherSettings(); // 保存其他设置
-    this.applyFontAndSizeClass(); // 更新当前页字号样式类
-     // 注意：字号变化也应通知其他页面，但此方案暂未实现
+    app.saveOtherSettings();
+    
+    // 更新当前页面样式
+    this.updatePageStyle();
+    
+    // 记录字体大小变更
+    console.log('字体大小已更改为:', selectedSize.name, '(', selectedSize.value, ')');
+    
+    // 通知所有页面字体已更改
+    app.notifyAllPagesStyleChanged();
   },
   
   // --- 开关项切换 (调用 saveOtherSettings) ---
   toggleAutoSave: function(e) {
+    const app = getApp();
     const value = e.detail.value;
     this.setData({ 'settings.autoSave': value });
     app.globalData.autoSave = value;
     app.saveOtherSettings();
   },
   toggleLivePreview: function(e) {
+    const app = getApp();
     const value = e.detail.value;
     this.setData({ 'settings.livePreview': value });
     app.globalData.livePreview = value;
     app.saveOtherSettings();
   },
   toggleSpellCheck: function(e) {
+    const app = getApp();
     const value = e.detail.value;
     this.setData({ 'settings.spellCheck': value });
     app.globalData.spellCheck = value;
@@ -863,9 +892,9 @@ Page({
     });
     
     app.globalData.theme = selectedTheme.value;
-    app.saveSettings();
+    app.saveThemeSettings();
     this.updatePageStyle();
-    app.updateTheme(); // 更新 TabBar 等全局元素
+    app.updateTabBarTheme(selectedTheme.value); // 修改为 updateTabBarTheme
   },
 
   // 显示字体选择器
@@ -887,9 +916,18 @@ Page({
       showFontSelector: false
     });
     
+    // 更新全局设置
     app.globalData.font = selectedFont.value;
-    app.saveSettings();
+    app.saveOtherSettings();
+    
+    // 更新当前页面样式
     this.updatePageStyle();
+    
+    // 记录字体变更
+    console.log('字体已更改为:', selectedFont.name, '(', selectedFont.value, ')');
+    
+    // 通知所有页面字体已更改
+    app.notifyAllPagesStyleChanged();
   },
 
   // 显示字号选择器
@@ -911,21 +949,18 @@ Page({
       showFontSizeSelector: false
     });
     
+    // 更新全局设置
     app.globalData.fontSize = selectedSize.value;
-    app.saveSettings();
+    app.saveOtherSettings();
+    
+    // 更新当前页面样式
     this.updatePageStyle();
-  },
-
-  // 更新当前页面样式
-  updatePageStyle: function() {
-    const app = getApp();
-    const globalSettings = app.globalData;
-    const fontClass = `theme-${globalSettings.theme || 'light'} font-${globalSettings.font || 'system'} font-size-${globalSettings.fontSize || 'medium'}`;
-    this.setData({ fontClass: fontClass });
-    console.log('更新页面样式类:', fontClass);
-    // 强制重绘页面以应用新样式 (可选，有时需要)
-    // this.setData({ 'userInfo.name': this.data.userInfo.name + ' ' }); // 强制更新
-    // setTimeout(() => this.setData({ 'userInfo.name': this.data.userInfo.name.trim() }), 0);
+    
+    // 记录字体大小变更
+    console.log('字体大小已更改为:', selectedSize.name, '(', selectedSize.value, ')');
+    
+    // 通知所有页面字体已更改
+    app.notifyAllPagesStyleChanged();
   },
 
   // 阻止事件冒泡
@@ -937,7 +972,7 @@ Page({
     const value = e.detail.value;
     this.setData({ 'settings.autoSave': value });
     app.globalData.autoSave = value;
-    app.saveSettings();
+    app.saveOtherSettings();
   },
   
   toggleLivePreview: function(e) {
@@ -945,7 +980,7 @@ Page({
     const value = e.detail.value;
     this.setData({ 'settings.livePreview': value });
     app.globalData.livePreview = value;
-    app.saveSettings();
+    app.saveOtherSettings();
   },
   
   toggleSpellCheck: function(e) {

@@ -1,4 +1,4 @@
-<view class="container" id="page-root">
+<view class="theme-{{theme}} {{fontStyleClass}} container" id="page-root">
   <navigation-bar title="导入Markdown文件" showBack="{{true}}"></navigation-bar>
   
   <view class="header">

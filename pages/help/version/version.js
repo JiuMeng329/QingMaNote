@@ -1,7 +1,7 @@
 // pages/help/version/version.js
 Page({
   data: {
-    currentVersion: 'v1.0.7',
+    currentVersion: 'v1.0.8',
     versionHistory: [
       {
         version: 'v1.0.0',
@@ -66,10 +66,19 @@ Page({
           '新添加示例文件',
           '修复已知问题'
         ]
+      },
+      {
+        version: 'v1.0.8',
+        date: '2025-05-09',
+        changes: [
+          '新增字号大小设置',
+          '新增字体设置',
+          '修复已知问题'
+        ]
       }
     ],
     currentTheme: 'light',
-    fontClass: ''
+    fontStyleClass: ''
   },
 
   onLoad() {
@@ -83,11 +92,15 @@ Page({
     
     // 设置主题
     this.updateTheme();
+    // 应用字体样式
+    this.applyGlobalFontStyle();
   },
 
   onShow() {
     // 每次显示页面时更新主题
     this.updateTheme();
+    // 应用字体样式
+    this.applyGlobalFontStyle();
   },
 
   /**
@@ -101,10 +114,31 @@ Page({
       const theme = app.getCurrentTheme();
       this.setData({ currentTheme: theme });
     }
-    
-    // 获取字体设置
-    if (app.globalData && app.globalData.fontClass) {
-      this.setData({ fontClass: app.globalData.fontClass });
-    }
+  },
+
+  /**
+   * 应用全局字体样式
+   */
+  applyGlobalFontStyle: function() {
+    const app = getApp();
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Version page applying font style:', fontStyleClass);
+  },
+
+  /**
+   * 响应样式变化
+   */
+  onStyleChange: function() {
+    console.log('Version page received style change');
+    this.applyGlobalFontStyle();
+  },
+
+  /**
+   * 主题变化回调
+   */
+  onThemeChange(theme) {
+    console.log('Version page received theme change:', theme);
+    this.setData({ currentTheme: theme });
   }
 });

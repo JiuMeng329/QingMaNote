@@ -1,5 +1,5 @@
 <view class="theme-{{theme}}">
-<view id="page-root" class="{{globalStyleClass}}">
+<view id="page-root" class="{{fontStyleClass}}">
 <!--pages/preview/preview.wxml-->
 <navigation-bar title="{{documentTitle}}" back="{{true}}" color="black" background="#FFF">
   <view slot="center" class="nav-center">

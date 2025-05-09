@@ -10,17 +10,20 @@ Page({
     // templates: [ ... ], // 暂时移除模板功能
     allTags: [], // 所有可选标签
     selectedTagIds: [], // 已选中的标签ID
-    theme: 'light' // 添加 theme 状态
+    theme: 'light', // 添加 theme 状态
+    fontStyleClass: '' // 添加字体样式类
   },
   
   onLoad: function() {
     this.updateTheme(); // 加载时更新主题
+    this.applyGlobalFontStyle(); // 应用全局字体样式
     // 加载所有标签
     this.loadAllTags();
   },
   
   onShow: function() {
     this.updateTheme(); // 页面显示时更新主题
+    this.applyGlobalFontStyle(); // 应用全局字体样式
     // 页面显示时可以考虑重新加载标签，以防标签有变动
      this.loadAllTags();
   },
@@ -155,5 +158,18 @@ Page({
         icon: 'none'
       });
     }
+  },
+
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Create page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Create page received style change');
+    this.applyGlobalFontStyle();
   }
 })

@@ -12,7 +12,8 @@ Page({
     searchValue: '',
     showSearch: false,
     theme: 'light',
-    themeMode: 'system'
+    themeMode: 'system',
+    fontStyleClass: ''
   },
 
   onLoad: function() {
@@ -20,6 +21,7 @@ Page({
     this.loadRecentDocuments();
     this.loadFolders();
     this.updateTheme();
+    this.applyGlobalFontStyle();
   },
   
   onShow: function() {
@@ -27,6 +29,7 @@ Page({
     this.loadRecentDocuments();
     this.loadFolders();
     this.updateTheme();
+    this.applyGlobalFontStyle();
   },
   
   updateTheme() {
@@ -39,6 +42,19 @@ Page({
   onThemeChange(theme) {
     console.log('Index page received theme change:', theme);
     this.setData({ theme: theme });
+  },
+  
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Index page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Index page received style change');
+    this.applyGlobalFontStyle();
   },
   
   // 加载最近文档

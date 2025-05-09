@@ -64,3 +64,141 @@ page {
   --svg-filter: brightness(0) saturate(100%) invert(0.8); /* GitHub主题下的SVG过滤器：使用浅灰色 */
   --primary-filter: invert(68%) sepia(19%) saturate(6401%) hue-rotate(189deg) brightness(101%) contrast(101%); /* GitHub主题主色调滤镜 */
 }
+
+/* 字体相关样式 */
+/* 系统默认字体 */
+.font-system {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--font-family);
+}
+
+/* 衬线字体 */
+.font-serif {
+  --font-family: Georgia, "Times New Roman", Times, SimSun, "宋体", serif;
+  font-family: var(--font-family);
+}
+
+/* 无衬线字体 */
+.font-sans-serif {
+  --font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", sans-serif;
+  font-family: var(--font-family);
+}
+
+/* 楷书 */
+.font-kai {
+  --font-family: "楷体", KaiTi, "楷体_GB2312", "STKaiti", serif;
+  font-family: var(--font-family);
+}
+
+/* 等宽字体 */
+.font-monospace {
+  --font-family: "Courier New", Courier, "Liberation Mono", "Source Code Pro", monospace, "Microsoft YaHei", "微软雅黑";
+  font-family: var(--font-family);
+}
+
+/* 圆体 */
+.font-rounded {
+  --font-family: "Avenir Next", "Avenir", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+  font-family: var(--font-family);
+}
+
+/* 字号相关样式 */
+.font-size-xs {
+  --font-size-base: 26rpx;
+  --font-size-title: 30rpx;
+  --font-size-subtitle: 28rpx;
+  --font-size-content: 26rpx;
+  --font-size-small: 20rpx;
+  font-size: var(--font-size-base);
+}
+
+.font-size-small {
+  --font-size-base: 28rpx;
+  --font-size-title: 32rpx;
+  --font-size-subtitle: 30rpx;
+  --font-size-content: 28rpx;
+  --font-size-small: 22rpx;
+  font-size: var(--font-size-base);
+}
+
+.font-size-medium {
+  --font-size-base: 30rpx;
+  --font-size-title: 34rpx;
+  --font-size-subtitle: 32rpx;
+  --font-size-content: 30rpx;
+  --font-size-small: 24rpx;
+  font-size: var(--font-size-base);
+}
+
+.font-size-large {
+  --font-size-base: 32rpx;
+  --font-size-title: 36rpx;
+  --font-size-subtitle: 34rpx;
+  --font-size-content: 32rpx;
+  --font-size-small: 26rpx;
+  font-size: var(--font-size-base);
+}
+
+.font-size-xl {
+  --font-size-base: 34rpx;
+  --font-size-title: 38rpx;
+  --font-size-subtitle: 36rpx;
+  --font-size-content: 34rpx;
+  --font-size-small: 28rpx;
+  font-size: var(--font-size-base);
+}
+
+/* 强制应用字号样式到所有页面和组件 */
+page, view, text, button, input, textarea, rich-text {
+  font-size: inherit;
+}
+
+.font-size-xs page,
+.font-size-xs view,
+.font-size-xs text,
+.font-size-xs button,
+.font-size-xs input,
+.font-size-xs textarea,
+.font-size-xs rich-text {
+  font-size: var(--font-size-base, 26rpx);
+}
+
+.font-size-small page,
+.font-size-small view,
+.font-size-small text,
+.font-size-small button,
+.font-size-small input,
+.font-size-small textarea,
+.font-size-small rich-text {
+  font-size: var(--font-size-base, 28rpx);
+}
+
+.font-size-medium page,
+.font-size-medium view,
+.font-size-medium text,
+.font-size-medium button,
+.font-size-medium input,
+.font-size-medium textarea,
+.font-size-medium rich-text {
+  font-size: var(--font-size-base, 30rpx);
+}
+
+.font-size-large page,
+.font-size-large view,
+.font-size-large text,
+.font-size-large button,
+.font-size-large input,
+.font-size-large textarea,
+.font-size-large rich-text {
+  font-size: var(--font-size-base, 32rpx);
+}
+
+.font-size-xl page,
+.font-size-xl view,
+.font-size-xl text,
+.font-size-xl button,
+.font-size-xl input,
+.font-size-xl textarea,
+.font-size-xl rich-text {
+  font-size: var(--font-size-base, 34rpx);
+}

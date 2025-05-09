@@ -1,5 +1,5 @@
 <!--pages/tag/tag-detail/tag-detail.wxml-->
-<view class="theme-{{theme}}">
+<view class="theme-{{theme}} {{fontStyleClass}}">
   <view id="page-root" class="{{globalStyleClass}}">
     <navigation-bar title="{{tag.name || '标签详情'}}" back="{{true}}" color="{{headerTextColor}}" background="{{tag.color || '#FFF'}}" theme="{{theme}}">
       <view slot="right" class="nav-right">

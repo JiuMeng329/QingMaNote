@@ -3,7 +3,44 @@ Page({
     importProgress: 0,
     importStatus: '',
     showProgress: false,
-    fileInfo: null
+    fileInfo: null,
+    theme: 'light',
+    fontStyleClass: ''
+  },
+
+  onLoad: function() {
+    const app = getApp();
+    this.updateTheme();
+    this.applyGlobalFontStyle();
+  },
+
+  onShow: function() {
+    this.updateTheme();
+    this.applyGlobalFontStyle();
+  },
+
+  updateTheme() {
+    const app = getApp();
+    if (app.getCurrentTheme) {
+      this.setData({ theme: app.getCurrentTheme() });
+    }
+  },
+
+  onThemeChange(theme) {
+    console.log('Import page received theme change:', theme);
+    this.setData({ theme: theme });
+  },
+
+  applyGlobalFontStyle: function() {
+    const app = getApp();
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Import page applying font style:', fontStyleClass);
+  },
+
+  onStyleChange: function() {
+    console.log('Import page received style change');
+    this.applyGlobalFontStyle();
   },
 
   // 显示导入选项

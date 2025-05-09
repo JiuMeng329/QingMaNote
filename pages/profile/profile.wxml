@@ -185,7 +185,10 @@
             wx:key="value" 
             data-index="{{index}}" 
             bindtap="selectFont">
-        <text>{{item.name}}</text>
+        <view class="font-item-content">
+          <text>{{item.name}}</text>
+          <text class="font-sample font-{{item.value}}">文字示例 ABC (123)</text>
+        </view>
         <view class="selected-icon" wx:if="{{settings.font === item.name}}">✓</view>
       </view>
     </view>
@@ -203,7 +206,10 @@
             wx:key="value" 
             data-index="{{index}}" 
             bindtap="selectFontSize">
-        <text>{{item.name}}</text>
+        <view class="font-item-content">
+          <text>{{item.name}}</text>
+          <text class="font-sample font-size-{{item.value}}">文字示例 ABC (123)</text>
+        </view>
         <view class="selected-icon" wx:if="{{settings.fontSize === item.name}}">✓</view>
       </view>
     </view>

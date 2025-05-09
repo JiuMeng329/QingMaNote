@@ -1,4 +1,4 @@
-<view class="theme-{{theme}}">
+<view class="theme-{{theme}} {{fontStyleClass}}">
 <view id="page-root" class="{{globalStyleClass}}">
 <!--pages/document/document.wxml-->
 <navigation-bar title="{{pageTitle || '文档'}}" back="{{currentTagId}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}">

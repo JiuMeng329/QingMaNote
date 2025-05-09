@@ -9,7 +9,8 @@ Page({
     renderedContent: '',
     wordCount: 0,
     showMenu: false,
-    theme: 'light' // Add theme state
+    theme: 'light', // Add theme state
+    fontStyleClass: '' // 添加字体样式类
   },
 
   onLoad: function(options) {
@@ -20,10 +21,12 @@ Page({
       this.loadDocument(options.id);
     }
     this.updateTheme(); // Update theme on load
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
 
   onShow: function() {
     this.updateTheme(); // Update theme on show
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
 
   // 更新主题状态 (New)
@@ -37,6 +40,21 @@ Page({
     console.log('Preview page received theme change:', theme);
     this.setData({ theme: theme });
     // Update navigation bar style if needed
+  },
+
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Preview page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Preview page received style change');
+    this.applyGlobalFontStyle();
+    // 如果需要重新渲染内容，可以在这里处理
+    this.renderMarkdown(this.data.content);
   },
 
   // 加载文档内容

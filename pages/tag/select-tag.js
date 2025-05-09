@@ -18,7 +18,8 @@ Page({
       '#1890FF', '#2F54EB', '#722ED1', '#EB2F96',
       '#BFBFBF', '#8C8C8C', '#595959', '#262626'
     ],
-    theme: 'light' // Add theme state
+    theme: 'light', // Add theme state
+    fontStyleClass: '' // 添加字体样式类
   },
 
   onLoad: function (options) {
@@ -39,14 +40,12 @@ Page({
     }
 
     this.updateTheme(); // Update theme on load
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
 
   onShow: function() {
-    // 检查并应用全局样式更新
-    if (app.globalData.styleChanged) {
-      this.applyGlobalStyle();
-      app.globalData.styleChanged = false; // 重置标识
-    }
+    this.updateTheme(); // 页面显示时更新主题
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
 
   // 加载所有标签
@@ -193,11 +192,29 @@ Page({
     }
   },
 
-  // 应用全局样式
-  applyGlobalStyle: function() {
-    const globalStyleClass = app.getGlobalStyleClass();
-    this.setData({ globalStyleClass: globalStyleClass }); 
-    console.log('Select Tag page applying global style:', globalStyleClass);
+  // 更新主题状态
+  updateTheme() {
+    const currentTheme = app.getCurrentTheme();
+    this.setData({ theme: currentTheme });
+  },
+
+  // 主题变化回调
+  onThemeChange(theme) {
+    console.log('Select Tag page received theme change:', theme);
+    this.setData({ theme: theme });
+  },
+
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Select Tag page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Select Tag page received style change');
+    this.applyGlobalFontStyle();
   },
 
   // 根据背景色计算合适的文字颜色（黑/白）

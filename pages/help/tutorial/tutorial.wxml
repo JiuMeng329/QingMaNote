@@ -1,6 +1,6 @@
 <!--pages/help/tutorial/tutorial.wxml-->
 <navigation-bar title="功能介绍/使用教程" back="{{true}}" color="black" background="#FFF"></navigation-bar>
-<view id="page-root" class="theme-{{currentTheme}} {{fontClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
+<view id="page-root" class="theme-{{currentTheme}} {{fontStyleClass}}" style="background-color: var(--bg-color); color: var(--text-color);">
 
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="tutorial-container">

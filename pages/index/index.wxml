@@ -1,5 +1,5 @@
 <view class="theme-{{theme}}">
-<view id="page-root" class="{{globalStyleClass}}">
+<view id="page-root" class="{{fontStyleClass}}">
 <!--index.wxml-->
 <navigation-bar title="轻码笔记" back="{{false}}" color="{{theme === 'light' ? 'black' : (theme === 'dark' ? 'white' : '#c9d1d9')}}" background="{{theme === 'light' ? '#FFF' : (theme === 'dark' ? '#1E1E1E' : '#161b22')}}" theme="{{theme}}"></navigation-bar>
 <scroll-view class="scrollarea" scroll-y type="list">

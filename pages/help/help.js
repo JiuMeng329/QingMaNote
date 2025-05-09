@@ -21,9 +21,9 @@ Page({
         path: '/pages/help/version/version'
       }
     ],
-    version: 'v1.0.7',
+    version: 'v1.0.8',
     currentTheme: 'light',
-    fontClass: ''
+    fontStyleClass: ''
   },
 
   /**
@@ -40,6 +40,8 @@ Page({
 
     // 设置主题
     this.updateTheme();
+    // 应用字体样式
+    this.applyGlobalFontStyle();
   },
 
   /**
@@ -48,6 +50,8 @@ Page({
   onShow() {
     // 每次显示页面时更新主题
     this.updateTheme();
+    // 应用字体样式
+    this.applyGlobalFontStyle();
   },
 
   /**
@@ -61,11 +65,32 @@ Page({
       const theme = app.getCurrentTheme();
       this.setData({ currentTheme: theme });
     }
-    
-    // 获取字体设置
-    if (app.globalData && app.globalData.fontClass) {
-      this.setData({ fontClass: app.globalData.fontClass });
-    }
+  },
+
+  /**
+   * 应用全局字体样式
+   */
+  applyGlobalFontStyle: function() {
+    const app = getApp();
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Help page applying font style:', fontStyleClass);
+  },
+
+  /**
+   * 响应样式变化
+   */
+  onStyleChange: function() {
+    console.log('Help page received style change');
+    this.applyGlobalFontStyle();
+  },
+
+  /**
+   * 主题变化回调
+   */
+  onThemeChange(theme) {
+    console.log('Help page received theme change:', theme);
+    this.setData({ currentTheme: theme });
   },
 
   /**

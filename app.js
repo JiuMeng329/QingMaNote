@@ -6,8 +6,8 @@ App({
     themeMode: 'system', // 'system' or 'manual'
     manualTheme: 'light', // 'light', 'dark', 'github' - Used when themeMode is 'manual'
     // --- Other Settings --- (Keep existing)
-    font: 'system', // system, serif, sans-serif, kai
-    fontSize: 'medium', // small, medium, large
+    font: 'system', // system, serif, sans-serif, kai, monospace, rounded
+    fontSize: 'medium', // xs, small, medium, large, xl
     autoSave: true,
     livePreview: true,
     spellCheck: false,
@@ -181,8 +181,42 @@ App({
       spellCheck: this.globalData.spellCheck,
       cloudSync: this.globalData.cloudSync
     });
-    // 注意：字体和字号变化也应该通知页面，但示例未包含，暂时省略
-    // this.globalData.styleChanged = true; // 旧逻辑，已移除
+  },
+  
+  // 通知所有页面样式已更改
+  notifyAllPagesStyleChanged: function() {
+    console.log('通知所有页面样式已更改');
+    // 获取所有页面
+    const pages = getCurrentPages();
+    
+    // 先强制更新当前页面（立即可见效果）
+    if (pages.length > 0) {
+      const currentPage = pages[pages.length - 1];
+      if (currentPage && currentPage.applyGlobalFontStyle) {
+        console.log('立即更新当前页面:', currentPage.route);
+        currentPage.applyGlobalFontStyle();
+      }
+    }
+    
+    // 逐个通知其他页面
+    pages.forEach(page => {
+      if (page && page.onStyleChange) {
+        console.log('通知页面:', page.route);
+        page.onStyleChange();
+      }
+    });
+    
+    // 触发一次全局主题更新以确保所有组件都更新
+    const currentTheme = this.getCurrentTheme();
+    this.notifyAllPages(currentTheme);
+  },
+  
+  // 获取全局样式类
+  getGlobalStyleClass: function() {
+    const currentTheme = this.getCurrentTheme();
+    const fontClass = `font-${this.globalData.font || 'system'}`;
+    const fontSizeClass = `font-size-${this.globalData.fontSize || 'medium'}`;
+    return `theme-${currentTheme} ${fontClass} ${fontSizeClass}`;
   },
   
   // 加载用户信息

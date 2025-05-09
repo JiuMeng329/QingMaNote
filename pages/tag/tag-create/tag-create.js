@@ -20,11 +20,13 @@ Page({
       '#666666', // 灰色
       '#000000'  // 黑色
     ],
-    theme: 'light' // 添加 theme 状态
+    theme: 'light', // 添加 theme 状态
+    fontStyleClass: '' // 添加字体样式类
   },
 
   onLoad: function(options) {
     this.updateTheme(); // 加载时更新主题
+    this.applyGlobalFontStyle(); // 应用全局字体样式
 
     // 判断是创建模式还是编辑模式
     if (options.mode === 'edit' && options.id) {
@@ -49,6 +51,7 @@ Page({
   onShow: function() {
     // 页面显示时也可能需要更新主题，以防从后台切换回来时系统主题已改变
     this.updateTheme(); 
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
 
   // --- 主题相关方法 ---
@@ -68,6 +71,19 @@ Page({
     this.setData({ theme: theme });
     // 可选：根据主题更新导航栏颜色等
     // this.updateNavBarStyle(theme);
+  },
+
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Tag Create page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Tag Create page received style change');
+    this.applyGlobalFontStyle();
   },
 
   // 输入标签名称

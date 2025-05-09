@@ -7,19 +7,22 @@ Page({
   data: {
     tags: [],
     searchValue: '',
-    theme: 'light' // Add theme state
+    theme: 'light', // Add theme state
+    fontStyleClass: '' // 添加字体样式类
   },
   
   onLoad: function() {
     // 从本地存储加载标签列表
     this.loadTags();
     this.updateTheme(); // Update theme on load
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
   
   onShow: function() {
     // 页面显示时刷新标签列表，确保显示最新数据
     this.loadTags();
     this.updateTheme(); // Update theme on show
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
   
   // 更新主题状态 (New)
@@ -33,6 +36,19 @@ Page({
     console.log('Tag page received theme change:', theme);
     this.setData({ theme: theme });
     // Update navigation bar style if needed
+  },
+  
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Tag page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Tag page received style change');
+    this.applyGlobalFontStyle();
   },
   
   // 加载标签数据

@@ -12,7 +12,8 @@ Page({
     documents: [],
     isLoading: true,
     headerTextColor: '#FFFFFF', // 默认导航栏文字颜色为白色
-    theme: 'light' // Add theme state
+    theme: 'light', // Add theme state
+    fontStyleClass: '' // 添加字体样式类
   },
 
   onLoad: function(options) {
@@ -31,6 +32,7 @@ Page({
       });
     }
     this.updateTheme(); // Update theme on load
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
   
   onShow: function() {
@@ -40,6 +42,7 @@ Page({
     }
     
     this.updateTheme(); // Update theme on show
+    this.applyGlobalFontStyle(); // 应用全局字体样式
   },
 
   // 更新主题状态 (New)
@@ -55,6 +58,19 @@ Page({
     console.log('Tag detail page received theme change:', theme);
     this.setData({ theme: theme });
     // Update navigation bar color?
+  },
+
+  // 应用全局字体样式
+  applyGlobalFontStyle: function() {
+    const fontStyleClass = app.getGlobalStyleClass();
+    this.setData({ fontStyleClass });
+    console.log('Tag detail page applying font style:', fontStyleClass);
+  },
+
+  // 响应样式变化
+  onStyleChange: function() {
+    console.log('Tag detail page received style change');
+    this.applyGlobalFontStyle();
   },
 
   // 加载标签数据
